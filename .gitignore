@@ -1,1 +1,6 @@
+# Compiler files
 bin/
+build/
+
+# IDE files
+.vscode/
