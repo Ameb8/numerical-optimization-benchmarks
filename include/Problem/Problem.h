@@ -12,7 +12,7 @@ protected:
     const char* const name;   // Function name
 
 public:
-    // Constructor with member-initalizer list
+    // Constructor with member-initializer list
     Problem(double lb, double ub, const char* n)
         : lowerBound(lb), upperBound(ub), name(n) {}
 
