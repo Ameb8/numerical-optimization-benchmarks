@@ -3,10 +3,10 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude -O2
 
 # Project directories
-SRC_DIR = src			# Holds source code
-BUILD_DIR = build		# Holds object files
-BIN_DIR = bin			# Holds executable binary
-INCLUDE_DIR = include	# Holds header files
+SRC_DIR = src
+BUILD_DIR = build
+BIN_DIR = bin
+INCLUDE_DIR = include
 
 # Output executable
 TARGET = $(BIN_DIR)/benchmark
