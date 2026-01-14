@@ -1,3 +1,9 @@
+#ifndef SCHWEFEL_H
+#define SCHWEFEL_H
+
+#include "Problem/Problem.h"
+#include <vector>
+
 class Schwefel : public Problem {
 private:
     static constexpr double LOWER = -512.0;
@@ -15,3 +21,5 @@ public:
         return 418.9829 * x.size() - sum;
     }
 };
+
+#endif

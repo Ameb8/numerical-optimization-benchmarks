@@ -1,7 +1,7 @@
 #ifndef DEJONG_H
 #define DEJONG_H
 
-#include "Problem.h"
+#include "Problem/Problem.h"
 #include <vector>
 
 
