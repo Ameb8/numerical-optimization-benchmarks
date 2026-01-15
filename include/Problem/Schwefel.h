@@ -15,9 +15,10 @@ public:
 
     double evaluate(const std::vector<double>& x) const override {
         double sum = 0.0;
-        for (double xi : x) {
+        
+        for(double xi : x)
             sum += xi * std::sin(std::sqrt(std::abs(xi)));
-        }
+        
         return 418.9829 * x.size() - sum;
     }
 };

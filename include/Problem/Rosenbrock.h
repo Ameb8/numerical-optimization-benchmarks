@@ -25,7 +25,7 @@ public:
             sum += 100 * term1 * term1 + term2 * term2;
         }
 
-        return sum
+        return sum;
     }
 };
 
