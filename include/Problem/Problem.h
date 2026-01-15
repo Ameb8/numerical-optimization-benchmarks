@@ -9,11 +9,11 @@ class Problem {
 protected:
     const double lowerBound;  // Lower bound of input values
     const double upperBound;  // Upper bound of input values
-    const char* const name;   // Function name
+    const std::string name;   // Function name
 
 public:
     // Constructor with member-initializer list
-    Problem(double lb, double ub, const char* n)
+    Problem(double lb, double ub, const std::string_view n)
         : lowerBound(lb), upperBound(ub), name(n) {}
 
     // Virtual destructor
@@ -25,7 +25,7 @@ public:
 
     double getLowerBound() const { return lowerBound; }
     double getUpperBound() const { return upperBound; }
-    const char* getName() const { return name; }
+    const std::string getName() const { return name; }
 };
 
 #endif // PROBLEM_H

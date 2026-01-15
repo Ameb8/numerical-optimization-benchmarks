@@ -11,7 +11,7 @@ private:
     static constexpr std::string_view NAME = "Schwefel";
 
 public:
-    Schwefel() : Problem(LOWER, UPPER, NAME.data()) {}
+    Schwefel() : Problem(LOWER, UPPER, NAME) {}
 
     double evaluate(const std::vector<double>& x) const override {
         double sum = 0.0;
