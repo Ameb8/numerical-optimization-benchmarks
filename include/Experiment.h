@@ -20,7 +20,7 @@ private:
                 const Problem& problem, 
                 const Config& config);
 public:
-    int runExperiment(const std::string& configFile);
+    int runExperiment(Config config);
 };
 
 
