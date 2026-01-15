@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     TestRunner testRunner(configFile);
     int numTests = testRunner.runTests();
 
-    std::cout << "\n" << numTests << "Experiments executed successfully\n";
+    std::cout << "\n" << numTests << " Experiments executed successfully\n";
     
     return 0;
 }

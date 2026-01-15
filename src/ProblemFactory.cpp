@@ -34,18 +34,21 @@ std::unique_ptr<Problem> createRastrigin() {
 
 // Array mapping integer IDs -> factory functions
 constexpr std::array<Creator, 4> creators = {
-    &createSchwefel,    // ID 0
-    &createDeJongOne,   // ID 1
-    &createRosenbrock,  // ID 2
-    &createRastrigin  // ID 3
+    &createSchwefel,    // ID 1
+    &createDeJongOne,   // ID 2
+    &createRosenbrock,  // ID 3
+    &createRastrigin    // ID 4
 
 };
 
 } // anonymous namespace
 
 std::unique_ptr<Problem> ProblemFactory::create(int id) {
-    if (id < 0 || static_cast<std::size_t>(id) >= creators.size())
+    int index = id - 1; // Decrement index to array index
+
+    // Get Creator function
+    if (index < 0 || static_cast<std::size_t>(index) >= creators.size())
         throw std::out_of_range("Invalid problem ID");
 
-    return creators[id](); // Call the factory function
+    return creators[index](); // Call the factory function
 }

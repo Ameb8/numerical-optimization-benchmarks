@@ -11,16 +11,16 @@
 class Experiment { 
 private:
     std::string getTimestamp();
-    int writeCSV(const std::vector<double>& data, const std::string& filepath);
-    int writeJSON(const std::filesystem::path& dir,
+    bool writeCSV(const std::vector<double>& data, const std::string& filepath);
+    bool writeJSON(const std::filesystem::path& dir,
                                const std::string& timestamp,
-                               const Problem& problem,
+                               const std::string& problemName,
                                const Config& config);
-    int writeResults(const std::vector<double>& results, 
+    bool writeResults(const std::vector<double>& results, 
                 const Problem& problem, 
                 const Config& config);
 public:
-    int runExperiment(Config config);
+    bool runExperiment(Config config);
 };
 
 

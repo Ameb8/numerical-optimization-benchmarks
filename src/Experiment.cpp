@@ -19,9 +19,9 @@
 #define OUT_FILE "results.csv" // Temporary filepath
 
 
-int Experiment::writeJSON(const std::filesystem::path& dir,
+bool Experiment::writeJSON(const std::filesystem::path& dir,
                                const std::string& timestamp,
-                               const Problem& problem,
+                               const std::string& problemName,
                                const Config& config)
 {
     std::ofstream file(dir / "experiment.json"); // Open file
@@ -31,11 +31,12 @@ int Experiment::writeJSON(const std::filesystem::path& dir,
 
     // Write Experiment metadata as JSON
     file << "{\n";
+    file << "  \"experiment\": \"" << config.experimentName << "\",\n";
     file << "  \"ran_at\": \"" << timestamp << "\",\n";
     file << "  \"problem\": {\n";
-    file << "    \"name\": \"" << problem.getName() << "\",\n";
-    file << "    \"lower_bound\": " << problem.getLowerBound() << ",\n";
-    file << "    \"upper_bound\": " << problem.getUpperBound() << ",\n";
+    file << "    \"name\": \"" << problemName << "\",\n";
+    file << "    \"lower_bound\": " << config.lowerBound << ",\n";
+    file << "    \"upper_bound\": " << config.upperBound << ",\n";
     file << "    \"dimension\": " << config.dimension << "\n";
     file << "  },\n";
     file << "  \"config\": {\n";
@@ -44,7 +45,7 @@ int Experiment::writeJSON(const std::filesystem::path& dir,
     file << "  }\n";
     file << "}\n";
 
-    return SUCCESS;
+    return true;
 }
 
 
@@ -67,11 +68,11 @@ std::string Experiment::getTimestamp()
 
 
 
-int Experiment::writeCSV(const std::vector<double>& data, const std::string& filepath) {
+bool Experiment::writeCSV(const std::vector<double>& data, const std::string& filepath) {
     std::ofstream outFile(filepath); // Open file
 
     if(!outFile.is_open()) // Error opening file
-        return ERROR;
+        return false;
 
     // Write data
     for(size_t i = 0; i < data.size(); ++i) {
@@ -82,46 +83,68 @@ int Experiment::writeCSV(const std::vector<double>& data, const std::string& fil
     }
     outFile << "\n"; 
 
-    return SUCCESS;
+    return true;
 }
 
 
-int Experiment::writeResults(const std::vector<double>& results, 
+bool Experiment::writeResults(const std::vector<double>& results, 
                              const Problem& problem, 
                              const Config& config)
 {
-    namespace fs = std::filesystem;
+    namespace fs = std::filesystem; // Alias filesystem namespace
 
-    std::string timestamp = getTimestamp();
+    std::string timestamp = getTimestamp(); // Get timestamp
 
+    // Get filepath to results directory
     fs::path resultsDir = fs::current_path() / "results";
-    fs::path timestampDir = resultsDir / timestamp;
+    
+    // Name dir with experiment name
+    fs::path experimentDir = resultsDir / config.experimentName;
+    
+    // Use timestamp if no name provided
+    if(config.experimentName.empty())
+        fs::path experimentDir = resultsDir / timestamp;      
+    
+    int suffix = 2; // Create suffix version if timestamped dir exists
 
-    try {
-        fs::create_directories(timestampDir);
-    } catch (const fs::filesystem_error&) {
-        return ERROR;
+    while(fs::exists(experimentDir)) { // Append suffix until dir name is unique
+        experimentDir = resultsDir / (timestamp + "__" + std::to_string(suffix));
+        ++suffix;
+    }
+
+    try { // Create results directory
+        fs::create_directories(experimentDir);
+    } catch(const fs::filesystem_error&) {
+        return false; // Error creating file
     }
 
     // Write CSV
-    fs::path csvPath = timestampDir / OUT_FILE;
+    fs::path csvPath = experimentDir / OUT_FILE;
+    
+    // Error writing to csv
     if(!writeCSV(results, csvPath.string()))
-        return ERROR;
+        return false;
 
     // Write JSON metadata
-    if(!writeJSON(timestampDir, timestamp, problem, config))
-        return ERROR;
+    if(!writeJSON(experimentDir, timestamp, problem.getName(), config))
+        return false;
 
-    return SUCCESS;
+    return true;
 }
 
-int Experiment::runExperiment(Config config) {
+bool Experiment::runExperiment(Config config) {
     // Create problem with config's Problem ID as unique pointer
     auto problem = ProblemFactory::create(config.problemType);
-        
+
+    // Update config bounds if not provided
+    if(config.upperBound < config.lowerBound) {
+        config.lowerBound = problem->getLowerBound();
+        config.upperBound = problem->getUpperBound();
+    }
+    
     // Create and initialize population
     Population population(config.populationSize, config.dimension);
-    population.initialize(problem->getLowerBound(), problem->getUpperBound(), config.seed);
+    population.initialize(config.lowerBound, config.upperBound, config.seed);
 
     // Evaluate problem
     std::vector<double> results = population.evaluate(*problem);

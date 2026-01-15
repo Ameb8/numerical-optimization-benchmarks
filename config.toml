@@ -1,5 +1,5 @@
 [[experiment]]
-experiment_name = "DeJong 1"
+experiment_name = "Schwefel_Benchmark"
 upper_bound = 100.0
 lower_bound = -100.0
 population_size = 30
@@ -8,19 +8,22 @@ dimension = 30
 seed = 1
 
 [[experiment]]
+experiment_name = "DeJong1_Benchmark"
 population_size = 30
 problem_type = 2
 dimension = 10
 seed = 12
 
 [[experiment]]
+experiment_name = "Rosenbrock_Benchmark"
 population_size = 30
 problem_type = 3
 dimension = 20
 seed = 123
 
 [[experiment]]
+experiment_name = "Rastrigin_Benchmark"
 population_size = 20
-problem_type = 3
+problem_type = 4
 dimension = 20
 seed = 1234

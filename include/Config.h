@@ -7,8 +7,13 @@
 
 class Config {
 public:
+    // Experiment name
+    std::string experimentName;
+
     // Population
     int populationSize;
+    int lowerBound;
+    int upperBound;
 
     // Problem
     int problemType;
