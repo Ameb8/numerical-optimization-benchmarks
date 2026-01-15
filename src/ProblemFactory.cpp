@@ -33,7 +33,7 @@ std::unique_ptr<Problem> createRastrigin() {
 }
 
 // Array mapping integer IDs -> factory functions
-constexpr std::array<Creator, 2> creators = {
+constexpr std::array<Creator, 4> creators = {
     &createSchwefel,    // ID 0
     &createDeJongOne,   // ID 1
     &createRosenbrock,  // ID 2
