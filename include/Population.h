@@ -4,7 +4,7 @@
 #include "Problem/Problem.h"
 #include <vector>
 
-class Population {
+class Population { 
 private:
     const int n; // Population size (number of solutions)
     const int m; // Dimension of each solution vector
