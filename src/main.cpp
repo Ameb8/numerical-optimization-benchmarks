@@ -1,9 +1,18 @@
-#include <stdio.h>
 #include <iostream>
-#include "Experiment.h"
+#include <string.h>
+#include "TestRunner.h"
 
 
-int main() {
-    Experiment exp;
-    return exp.runExperiment("config.toml");
+int main(int argc, char* argv[]) {
+    std::string configFile = "config.toml";
+    
+    if(argc > 1)
+        configFile = argv[1];
+
+    TestRunner testRunner(configFile);
+    int numTests = testRunner.runTests();
+
+    std::cout << "\n" << numTests << "Experiments executed successfully\n";
+    
+    return 0;
 }

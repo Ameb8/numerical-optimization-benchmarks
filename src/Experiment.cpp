@@ -115,15 +115,7 @@ int Experiment::writeResults(const std::vector<double>& results,
     return SUCCESS;
 }
 
-int Experiment::runExperiment(const std::string& configFile) {
-    // Read and initialize config file
-    Config config;
-
-    if(!config.loadFromFile("config.toml")) {
-        std::cerr << "Failed to load configuration file\n";
-        return ERROR;
-    }
-
+int Experiment::runExperiment(Config config) {
     // Create problem with config's Problem ID as unique pointer
     auto problem = ProblemFactory::create(config.problemType);
         

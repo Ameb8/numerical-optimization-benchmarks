@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "toml.hpp"
+
 class Config {
 public:
     // Population
@@ -15,8 +17,8 @@ public:
     // Random
     unsigned int seed;
 
-    // Load from TOML
-    bool loadFromFile(const std::string& filename);
+
+    bool loadFromTable(const toml::table& tbl);
 };
 
 #endif
