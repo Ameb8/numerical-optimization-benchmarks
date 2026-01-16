@@ -7,7 +7,7 @@ from .load_data import load_experiment_data
 from .plot_builder import fitness_box_plot
 
 # Paths to project directories
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent
+PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
 DATA_DIR: Path = PROJECT_ROOT / "results"
 
 # File names for experiment data
@@ -19,12 +19,12 @@ def plot_results(result_dir: Path):
     experiment_results: pd.DataFrame = load_experiment_data(result_dir)
 
     # Iterate through experiments
-    for _, row in df.iterrows():
+    for _, row in experiment_results.iterrows():
         # Create fitness values box plot
-        experiment_name: str = str(row[experiment])
-        savePath: Path = result_dir / experiment_name 
-        title: str = f'{experiment} fitness values'
-        fitness_box_plot(row['fitness_values'], title=title)
+        experiment_name: str = str(row['experiment'])
+        save_path: Path = result_dir / experiment_name 
+        title: str = f'{str(row["experiment"])} fitness values'
+        fitness_box_plot(row['fitness_values'], save_path, title=title)
         
 
 

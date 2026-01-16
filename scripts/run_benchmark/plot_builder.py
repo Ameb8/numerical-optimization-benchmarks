@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 
-from typing import Sequence
+from typing import Optional, Sequence
 
 
 def fitness_box_plot(
@@ -13,10 +13,7 @@ def fitness_box_plot(
     title: Optional[str] = "Fitness Distribution",
     figsize: tuple[int, int] = (6, 8),
 ) -> None:
-
-    if not values:
-        raise ValueError("`values` must not be empty.")
-
+    
     # Ensure directory exists
     save_dir.mkdir(parents=True, exist_ok=True)
     save_path = save_dir / filename
