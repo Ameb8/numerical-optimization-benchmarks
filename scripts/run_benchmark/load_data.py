@@ -26,3 +26,17 @@ def load_experiment_data(root_dir: Path) -> pd.DataFrame:
         experiments.append(metadata) # Store experiment
 
     return pd.DataFrame(experiments) # Return as dataframe
+
+
+def add_stat_cols(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy() # Create copy of dataframe
+
+    # Add columns for useful statistics
+    df["mean"] = df["fitness_values"].apply(lambda x: np.mean(x))
+    df["std"] = df["fitness_values"].apply(lambda x: np.std(x, ddof=1))
+    df["median"] = df["fitness_values"].apply(lambda x: np.median(x))
+    df["min"] = df["fitness_values"].apply(lambda x: np.min(x))
+    df["max"] = df["fitness_values"].apply(lambda x: np.max(x))
+    df["range"] = df["max"] - df["min"]
+
+    return df
