@@ -6,5 +6,10 @@ results/
 bin/
 build/
 
+# Python files
+*.pyc
+__pycache__/
+.venv/
+
 # IDE files
 .vscode/
