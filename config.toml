@@ -1,3 +1,6 @@
+[test]
+test_name = "Function_Benchmarks"
+
 [[experiment]]
 experiment_name = "Schwefel_Benchmark"
 upper_bound = 100.0

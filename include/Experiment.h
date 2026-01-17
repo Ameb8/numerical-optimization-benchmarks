@@ -13,14 +13,15 @@ private:
     std::string getTimestamp();
     bool writeCSV(const std::vector<double>& data, const std::string& filepath);
     bool writeJSON(const std::filesystem::path& dir,
-                               const std::string& timestamp,
-                               const std::string& problemName,
-                               const Config& config);
+                   const std::string& timestamp,
+                   const std::string& problemName,
+                   const Config& config);
     bool writeResults(const std::vector<double>& results, 
-                const Problem& problem, 
-                const Config& config);
+                      const Problem& problem, 
+                      const Config& config,
+                      const std::string runName);
 public:
-    bool runExperiment(Config config);
+    bool runExperiment(Config config, std::string runName);
 };
 
 

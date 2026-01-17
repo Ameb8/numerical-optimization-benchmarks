@@ -20,6 +20,12 @@ int TestRunner::loadFromFile(const std::string& configFile) {
         // Parse file into toml::table object
         toml::table tbl = toml::parse_file(configFile);
 
+        // Read test name from config
+        if(auto testTbl = tbl["test"].as_table()) {
+            if(auto name = testTbl->get_as<std::string>("test_name"))
+                testName = name->get();
+        }
+
         if(tbl.contains("experiment")) { // Ensure file contains experiments
             // Get experiment as array
             auto exps = tbl["experiment"].as_array();
@@ -62,7 +68,7 @@ int TestRunner::runTests() {
 
     // Run all experiments
     for(Config cfg : experiments) {
-        if(exp.runExperiment(cfg))
+        if(exp.runExperiment(cfg, testName))
            experimentsRan++; 
     }
 

@@ -88,15 +88,17 @@ bool Experiment::writeCSV(const std::vector<double>& data, const std::string& fi
 
 
 bool Experiment::writeResults(const std::vector<double>& results, 
-                             const Problem& problem, 
-                             const Config& config)
+                              const Problem& problem, 
+                              const Config& config,
+                              const std::string runName
+                            )
 {
     namespace fs = std::filesystem; // Alias filesystem namespace
 
     std::string timestamp = getTimestamp(); // Get timestamp
 
     // Get filepath to results directory
-    fs::path resultsDir = fs::current_path() / "results";
+    fs::path resultsDir = fs::current_path() / "results" / runName;
     
     // Name dir with experiment name
     fs::path experimentDir = resultsDir / config.experimentName;
@@ -132,7 +134,7 @@ bool Experiment::writeResults(const std::vector<double>& results,
     return true;
 }
 
-bool Experiment::runExperiment(Config config) {
+bool Experiment::runExperiment(Config config, std::string runName) {
     // Create problem with config's Problem ID as unique pointer
     auto problem = ProblemFactory::create(config.problemType);
 
@@ -150,5 +152,5 @@ bool Experiment::runExperiment(Config config) {
     std::vector<double> results = population.evaluate(*problem);
     
     // Write results
-    return writeResults(results, *problem, config);
+    return writeResults(results, *problem, config, runName);
 }
