@@ -2,31 +2,92 @@
 test_name = "Function_Benchmarks"
 
 [[experiment]]
-experiment_name = "Schwefel_Benchmark"
-upper_bound = 100.0
-lower_bound = -100.0
+experiment_name = "Schwefel"
+upper_bound = 512.0
+lower_bound = -512.0
 population_size = 30
 problem_type = 1
 dimension = 30
 seed = 1
 
 [[experiment]]
-experiment_name = "DeJong1_Benchmark"
+experiment_name = "DeJong_1"
+upper_bound = 100.0
+lower_bound = -100.0
 population_size = 30
 problem_type = 2
-dimension = 10
-seed = 12
+dimension = 30
+seed = 1
 
 [[experiment]]
-experiment_name = "Rosenbrock_Benchmark"
+experiment_name = "Rosenbrocks_Saddle"
+upper_bound = 100.0
+lower_bound = -100.0
 population_size = 30
 problem_type = 3
-dimension = 20
-seed = 123
+dimension = 30
+seed = 1
 
 [[experiment]]
-experiment_name = "Rastrigin_Benchmark"
-population_size = 20
+experiment_name = "Rastrigin"
+upper_bound = 30.0
+lower_bound = -30.0
+population_size = 30
 problem_type = 4
-dimension = 20
-seed = 1234
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Griewangk"
+upper_bound = 500.0
+lower_bound = -500.0
+population_size = 30
+problem_type = 5
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Sine_Envelope_Sine_Wave"
+upper_bound = 30.0
+lower_bound = -30.0
+population_size = 30
+problem_type = 6
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Stretched_V_Sine_Wave"
+upper_bound = 30.0
+lower_bound = -30.0
+population_size = 30
+problem_type = 7
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Ackley_One"
+upper_bound = 32.0
+lower_bound = -32.0
+population_size = 30
+problem_type = 8
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Ackley_Two"
+upper_bound = 32.0
+lower_bound = -32.0
+population_size = 30
+problem_type = 9
+dimension = 30
+seed = 1
+
+[[experiment]]
+experiment_name = "Egg_Holder"
+upper_bound = 500.0
+lower_bound = -500.0
+population_size = 30
+problem_type = 10
+dimension = 30
+seed = 1
+
