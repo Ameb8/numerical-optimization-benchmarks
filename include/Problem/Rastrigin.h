@@ -4,6 +4,7 @@
 #include "Problem/Problem.h"
 #include <vector>
 #include <cmath>
+#include <numbers>
 
 class Rastrigin : public Problem {
 private:
@@ -18,7 +19,7 @@ public:
         double sum = 0.0;
         
         for(double xi : x) // Calculate summation
-            sum += xi * xi - 10 * std::cos(2 * M_PI * xi);
+            sum += xi * xi - 10 * std::cos(2 * std::numbers::pi * xi);
 
         return 10 * x.size() + sum;
     }

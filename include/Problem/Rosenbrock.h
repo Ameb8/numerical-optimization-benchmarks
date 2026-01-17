@@ -18,7 +18,7 @@ public:
         
         for(size_t i = 0; i < x.size() - 1; i++) {
             // Calculate inner terms
-            const double term1 = x[i] * x[i] - x[i] + 1;
+            const double term1 = x[i] * x[i] - x[i+1];
             const double term2 = 1 - x[i];
 
             // Calculate value for summation

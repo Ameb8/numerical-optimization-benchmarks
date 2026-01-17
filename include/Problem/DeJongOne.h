@@ -20,7 +20,7 @@ public:
     double evaluate(const std::vector<double>& x) const override {
         double sum = 0.0;
 
-        for (double xi : x)
+        for(double xi : x)
             sum += xi * xi;
         
         return sum;
