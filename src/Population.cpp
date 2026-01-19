@@ -1,6 +1,6 @@
 #include "Population.h"
 #include <iostream>
-#include "mt.h"
+#include "External/mt.h"
 
 #define ERROR 0
 #define SUCCESS 1
