@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Experiment:
     experiment_name: str = "Unnamed"
     upper_bound: float = 100.0
@@ -15,31 +15,31 @@ class Experiment:
 
     def __post_init__(self):
         # Initialize Experiments
-        self.upper_bound = float(self.upper_bound)
-        self.lower_bound = float(self.lower_bound)
-        self.problem_type = int(self.problem_type)
-        self.dimension = int(self.dimension)
-        self.seed = int(self.seed)
+        object.__setattr__(self, "upper_bound", float(self.upper_bound))
+        object.__setattr__(self, "lower_bound", float(self.lower_bound))
+        object.__setattr__(self, "problem_type", int(self.problem_type))
+        object.__setattr__(self, "dimension", int(self.dimension))
+        object.__setattr__(self, "seed", int(self.seed))
 
         # Ensure valid population bounds
         if self.upper_bound <= self.lower_bound:
-            self.upper_bound = 100.0
-            self.lower_bound = -100.0
+            object.__setattr__(self, "upper_bound", 100.0)
+            object.__setattr__(self, "lower_bound", -100.0)
 
         # Ensure valid dimensions
         if self.dimension <= 0:
-            self.dimension = 30
+            object.__setattr__(self, "dimension", 30)
 
         # Ensure valid problem ID
-        if self.problem_type < 0 or self.problem_type > 10:
-            self.problem_type = 1
+        if not (0 <= self.problem_type <= 10):
+            object.__setattr__(self, "problem_type", 1)
 
         # Ensure valid seed
-        if self.seed < 0: 
-            self.seed = 102486
+        if self.seed < 0:
+            object.__setattr__(self, "seed", 102486)
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Benchmark:
     benchmark_name: str = f'Benchmark_{datetime.now()}'
     population_size: int = 30
