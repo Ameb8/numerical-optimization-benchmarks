@@ -3,12 +3,12 @@
 #include "Problem/DeJongOne.h"
 #include "Problem/Rosenbrock.h"
 #include "Problem/Rastrigin.h"
-//#include "Problem/Griewangk.h"
-//#include "Problem/SineEnvelope.h"
-//#include "Problem/StretchedV.h"
-//#include "Problem/AckleyOne.h"
-//#include "Problem/AckleyTwo.h"
-//#include "Problem/EggHolder.h"
+#include "Problem/Griewangk.h"
+#include "Problem/SineEnvelope.h"
+#include "Problem/StretchedV.h"
+#include "Problem/AckleyOne.h"
+#include "Problem/AckleyTwo.h"
+#include "Problem/EggHolder.h"
 
 namespace {
 
@@ -32,13 +32,44 @@ std::unique_ptr<Problem> createRastrigin() {
     return std::make_unique<Rastrigin>();
 }
 
-// Array mapping integer IDs -> factory functions
-constexpr std::array<Creator, 4> creators = {
-    &createSchwefel,    // ID 1
-    &createDeJongOne,   // ID 2
-    &createRosenbrock,  // ID 3
-    &createRastrigin    // ID 4
+std::unique_ptr<Problem> createGriewangk() {
+    return std::make_unique<Griewangk>();
+}
 
+std::unique_ptr<Problem> createSineEnvelope() {
+    return std::make_unique<SineEnvelope>();
+}
+
+std::unique_ptr<Problem> createStretchedV() {
+    return std::make_unique<StretchedV>();
+}
+
+std::unique_ptr<Problem> createAckleyOne() {
+    return std::make_unique<AckleyOne>();
+}
+
+std::unique_ptr<Problem> createAckleyTwo() {
+    return std::make_unique<AckleyTwo>();
+}
+
+std::unique_ptr<Problem> createEggHolder() {
+    return std::make_unique<EggHolder>();
+}
+
+
+
+// Array mapping integer IDs -> factory functions
+constexpr std::array<Creator, 10> creators = {
+    &createSchwefel,
+    &createDeJongOne,
+    &createRosenbrock,
+    &createRastrigin,
+    &createGriewangk,
+    &createSineEnvelope,
+    &createStretchedV,
+    &createAckleyOne,
+    &createAckleyTwo,
+    &createEggHolder
 };
 
 } // anonymous namespace
