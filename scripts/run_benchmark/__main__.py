@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import sys
 
-from .load_data import load_experiment_data, add_stat_cols
+from .load_data import load_benchmark_data
 from . import plot_builder
 from .models import Benchmark, Experiment
 from .run_experiments import run_benchmark
@@ -36,9 +36,10 @@ def main():
         encoding='utf-8'
     )
 
-    print(f'\n\nBenchmark:\n\n{benchmark}\n')
-
-    run_benchmark(benchmark)
+    run_benchmark(benchmark) # Compile and run benchmark program
+    
+    # Parse and load benchmark results
+    data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
 
 
 if __name__ == "__main__":

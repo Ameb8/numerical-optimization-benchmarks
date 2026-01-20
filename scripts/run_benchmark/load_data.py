@@ -1,42 +1,33 @@
 from pathlib import Path
 import pandas as pd
-import json
 import numpy as np
 
-def load_experiment_data(root_dir: Path) -> pd.DataFrame:
-    # DEBUG *****
-    print(f'Loading data from: {root_dir}')
 
-    experiments: list[dict[str, Any]] = [] # Stores experiment data
+def load_benchmark_data(result_dir: Path) -> pd.DataFrame:
+    fitness_df = pd.read_csv(result_dir / 'fitness.csv')
+    time_df = pd.read_csv(result_dir / 'time.csv')
 
-    # Iterate through experiment directories
-    for expr_dir in root_dir.iterdir():
-        if expr_dir.is_dir(): # Ignore non-directories
-            json_file: Path = expr_dir / "experiment.json"
-            csv_file: Path = expr_dir / "results.csv"
-        
-        # Load experiment data from experiment.json
-        with open(json_file) as f:
-            metadata: Dict[str, Any] = json.load(f)
-        
-        # Load fitness values from csv
-        data: np.ndarray = np.loadtxt(csv_file, delimiter=",")
-        
-        metadata['fitness_values'] = data # Add CSV data to metadata
-        experiments.append(metadata) # Store experiment
+    # Transpose fitness_df so experiments are rows
+    fitness_transposed = fitness_df.T
+    fitness_transposed.columns = [f"run_{i+1}" for i in range(fitness_transposed.shape[1])]
+    fitness_transposed.index.name = "experiment_name"
+    fitness_transposed.reset_index(inplace=True)
 
-    return pd.DataFrame(experiments) # Return as dataframe
+    # Combine all run columns into a single numpy array column
+    fitness_transposed["fitness_values"] = fitness_transposed.iloc[:, 1:].apply(lambda row: row.to_numpy(dtype=np.float64), axis=1)
 
+    # Keep only experiment_name and fitness_values
+    fitness_transposed = fitness_transposed[["experiment_name", "fitness_values"]]
 
-def add_stat_cols(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy() # Create copy of dataframe
+    # Merge Dataframes
+    processed_df = pd.merge(fitness_transposed, time_df, on="experiment_name")
 
-    # Add columns for useful statistics
-    df["mean"] = df["fitness_values"].apply(lambda x: np.mean(x))
-    df["std"] = df["fitness_values"].apply(lambda x: np.std(x, ddof=1))
-    df["median"] = df["fitness_values"].apply(lambda x: np.median(x))
-    df["min"] = df["fitness_values"].apply(lambda x: np.min(x))
-    df["max"] = df["fitness_values"].apply(lambda x: np.max(x))
-    df["range"] = df["max"] - df["min"]
+    # Add summary statistics
+    processed_df["mean"] = processed_df["fitness_values"].apply(np.mean)
+    processed_df["std"] = processed_df["fitness_values"].apply(np.std)
+    processed_df["median"] = processed_df["fitness_values"].apply(np.median)
+    processed_df["min"] = processed_df["fitness_values"].apply(np.min)
+    processed_df["max"] = processed_df["fitness_values"].apply(np.max)
+    processed_df["range"] = processed_df["max"] - processed_df["min"]
 
-    return df
+    return processed_df
