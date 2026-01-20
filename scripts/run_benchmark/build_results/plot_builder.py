@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -50,7 +51,7 @@ def build_histogram(
 
 
 
-def stat_bar_across_functions_sb(
+def build_stat_bar(
     function_names: Sequence[str],
     values: Sequence[float],
     save_dir: Path,
@@ -103,4 +104,33 @@ def stat_bar_across_functions_sb(
     fig.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close(fig)
 
+def build_violin_plot(
+    values: Sequence[float],
+    save_dir: Path,
+    filename: str,
+    title: str,
+    ylabel: str = "Fitness Value",
+    figsize: tuple[int, int] = (4, 6),
+    color: str = "lightgreen",
+) -> None:
+    save_dir.mkdir(parents=True, exist_ok=True)
+    save_path = save_dir / filename
 
+    sns.set_theme(style="whitegrid", palette="pastel")
+    sns.set_context("talk")
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    sns.violinplot(
+        y=values,
+        inner="quartile",
+        color=color,
+        ax=ax
+    )
+
+    ax.set_ylabel(ylabel, fontsize=14)
+    ax.set_title(title, fontsize=16, weight="bold")
+
+    sns.despine(trim=True)
+    fig.savefig(save_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
