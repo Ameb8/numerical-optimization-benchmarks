@@ -24,7 +24,7 @@ json BenchmarkRunner::loadJSON(const std::string& path) {
 
 Experiment BenchmarkRunner::parseExperiment(const json& j) {
     // Parse data from JSON
-    std::string name = j.at("name").get<std::string>();
+    std::string name = j.at("experiment_name").get<std::string>();
     int problemType = j.at("problem_type").get<int>();
     int popSize = j.at("population_size").get<int>();
     int dims = j.at("dimensions").get<int>();
@@ -122,8 +122,8 @@ void BenchmarkRunner::writeTimeCSV(const std::vector<Experiment>& experiments, c
 }
 
 void BenchmarkRunner::runBenchmarks(const std::string& inputFile, const std::string& benchmarkName) {
-    constexpr std::string fitnessName = "fitness.csv";
-    constexpr std::string timeName = "time.csv";
+    const std::string fitnessName = "fitness.csv";
+    const std::string timeName = "time.csv";
 
     json j = loadJSON(inputFile);
     std::vector<Experiment> experiments = parseExperiments(j);
