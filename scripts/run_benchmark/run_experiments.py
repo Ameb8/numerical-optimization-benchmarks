@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-from .load_config import Benchmark, Experiment
+from .models import Benchmark
 
 PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
 EXEC_PATH: Path = PROJECT_ROOT / 'bin' / 'benchmark'
@@ -27,9 +27,6 @@ def compile_benchmark() -> bool:
 def execute_benchmark(benchmark: Benchmark) -> bool:
     benchmark_path: Path = RESULTS_ROOT / benchmark.benchmark_name / 'benchmark.json'
     exec_command: list[str] = ['./bin/benchmark', benchmark_path, benchmark.benchmark_name]
-
-    # DEBUG ****
-    print(f'\nExecute Command: {exec_command}')
 
     result = subprocess.run(
         exec_command,
