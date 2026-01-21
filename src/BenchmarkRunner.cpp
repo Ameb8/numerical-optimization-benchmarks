@@ -113,7 +113,7 @@ void BenchmarkRunner::writeTimeCSV(const std::vector<Experiment>& experiments, c
         throw std::runtime_error("Cannot open file");
 
     // Write header to CSV
-    file << "experiment_name, wall_time\n";
+    file << "experiment_name,wall_time\n";
 
     // Write experiment name and wall time to CSV
     for(size_t i = 0; i < experiments.size(); i++)
