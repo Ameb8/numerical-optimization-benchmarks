@@ -1,0 +1,56 @@
+[project]
+name = "numerical-optimization-benchmarks"
+version = "0.1.0"
+description = "Experiment and analysis of standard benchmark function results with pseudo-random inputs"
+authors = [
+    { name="Alex Buckley", email="alex.buckley@cwu.edu" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["data", "analysis", "pandas", "seaborn", "pydantic"]
+
+# Dependencies 
+dependencies = [
+    "annotated-types==0.7.0",
+    "contourpy==1.3.3",
+    "cycler==0.12.1",
+    "fonttools==4.61.1",
+    "kiwisolver==1.4.9",
+    "matplotlib==3.10.8",
+    "numpy==2.4.1",
+    "packaging==25.0",
+    "pandas==2.3.3",
+    "pillow==12.1.0",
+    "pydantic==2.12.5",
+    "pydantic_core==2.41.5",
+    "pyparsing==3.3.1",
+    "python-dateutil==2.9.0.post0",
+    "pytz==2025.2",
+    "seaborn==0.13.2",
+    "six==1.17.0",
+    "typing-inspection==0.4.2",
+    "typing_extensions==4.15.0",
+    "tzdata==2025.3"
+]
+
+[tool.setuptools]
+package-dir = { "" = "scripts" }
+
+[tool.setuptools.packages.find]
+where = ["scripts"]
+include = ["run_benchmark*"]
+
+
+[project.urls]
+Homepage = "https://github.com/alexbuckley/numerical-optimization-benchmarks"
+Repository = "https://github.com/alexbuckley/numerical-optimization-benchmarks"
+
+# Console script entry point
+[project.scripts]
+numerical-benchmarks = "run_benchmark.__main__:main"
+
+# Build system
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
