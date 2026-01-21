@@ -5,7 +5,7 @@ import sys
 
 from .load_data import load_benchmark_data
 from .models import Benchmark, Experiment
-from .run_experiments import run_benchmark
+from .run_experiments import compile_benchmark, exec_benchmark
 from .build_results import build_result
 
 
@@ -21,10 +21,23 @@ def main():
     config_file: Path = DEFAULT_CONFIG
     
     if len(sys.argv) > 1:
-        config_file = sys.argv[1]
+        config_file = (PROJECT_ROOT / sys.argv[1]).resolve()
 
-    # Load benchmark config
-    benchmark: Benchmark = Benchmark.from_toml(config_file)
+    try:
+        # Load benchmark config
+        benchmark: Benchmark = Benchmark.from_toml(config_file)
+    except FileNotFoundError:
+        print(f"Error: Config file not found: {config_file}")
+        sys.exit(1)
+
+    except tomllib.TOMLDecodeError as e:
+        print(f"Error: Failed to parse TOML file {config_file}:\n{e}")
+        sys.exit(1)
+
+    except Exception as e:
+        print(f"Unexpected error loading benchmark config: {e}")
+        sys.exit(1)
+
 
     # Path to benchmark config
     benchmark_path = DATA_DIR / benchmark.benchmark_name / 'benchmark.json'
@@ -36,7 +49,12 @@ def main():
         encoding='utf-8'
     )
 
-    run_benchmark(benchmark) # Compile and run benchmark program
+    if not compile_benchmark(benchmark): # Compile benchmark program
+        sys.exit(1)
+
+    if not compile_benchmark(benchmark): # Execute benchmark program
+        sys.exit(1)
+        
     
     # Parse and load benchmark results
     data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)

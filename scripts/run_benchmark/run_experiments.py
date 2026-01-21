@@ -8,13 +8,23 @@ EXEC_PATH: Path = PROJECT_ROOT / 'bin' / 'benchmark'
 RESULTS_ROOT: Path = PROJECT_ROOT / 'results'
 
 def compile_benchmark() -> bool:
-    result = subprocess.run(
-        ['make'],
-        cwd=PROJECT_ROOT,
-        capture_output=True,
-        text=True,
-        check=False
-    )
+    try:
+        result = subprocess.run(
+            ['make'],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+    except FileNotFoundError:
+        print("Error: 'make' not found. Ensure it is installed and on PATH.")
+        return False
+    except PermissionError:
+        print("Error: Permission denied when running 'make'.")
+        return False
+    except Exception as e:
+        print(f"Unexpected error during compilation: {e}")
+        return False
 
     # Print compilation results
     print(f'\n\nCompiling Benchmark Program:\n{result.stdout}')
@@ -24,17 +34,27 @@ def compile_benchmark() -> bool:
 
     return result.returncode == 0
 
-def execute_benchmark(benchmark: Benchmark) -> bool:
+def exec_benchmark(benchmark: Benchmark) -> bool:
     benchmark_path: Path = RESULTS_ROOT / benchmark.benchmark_name / 'benchmark.json'
     exec_command: list[str] = ['./bin/benchmark', benchmark_path, benchmark.benchmark_name]
 
-    result = subprocess.run(
-        exec_command,
-        cwd=PROJECT_ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    try:
+        result = subprocess.run(
+            exec_command,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        print(f"Error: Executable './bin/benchmark' not found. Did you compile it?")
+        return False
+    except PermissionError:
+        print("Error: Permission denied when executing './bin/benchmark'.")
+        return False
+    except Exception as e:
+        print(f"Unexpected error executing benchmark: {e}")
+        return False
 
     print(f'\n\nBenchmark Executed:\n{result.stdout}')
 
@@ -47,7 +67,7 @@ def run_benchmark(benchmark: Benchmark) -> bool:
     if not compile_benchmark():
         return False
     
-    return execute_benchmark(benchmark)
+    return exec_benchmark(benchmark)
 
 
 

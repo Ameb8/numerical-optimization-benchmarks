@@ -118,9 +118,8 @@ def build_latex_report(
 \maketitle
 """ % (title, author))
 
-        # Write fitness taables
+        # Write fitness tables
         write_fitness_summary_table(f, df)
-        write_full_fitness_table(f, df)
 
         # Write figures header
         f.write("\n\\section{Benchmark Plots}\n")
