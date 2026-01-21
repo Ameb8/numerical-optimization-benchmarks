@@ -15,14 +15,32 @@ DEFAULT_CONFIG: Path = PROJECT_ROOT / 'config.toml'
 DATA_DIR: Path = PROJECT_ROOT / 'results'
 
 
-
-
 def main():
+    '''
     config_file: Path = DEFAULT_CONFIG
     
     if len(sys.argv) > 1:
         config_file = (PROJECT_ROOT / sys.argv[1]).resolve()
+    '''
+    # Treat invocation directory as project root
+    PROJECT_ROOT = Path.cwd()
 
+    DEFAULT_CONFIG = PROJECT_ROOT / "config.toml"
+    DATA_DIR = PROJECT_ROOT / "results"
+
+    if len(sys.argv) > 1:
+        config_file = Path(sys.argv[1])
+        if not config_file.is_absolute():
+            config_file = PROJECT_ROOT / config_file
+    else:
+        config_file = DEFAULT_CONFIG
+
+    config_file = config_file.resolve()
+
+    if not config_file.exists():
+        print(f"Config file not found: {config_file}")
+        sys.exit(1)
+        
     try:
         # Load benchmark config
         benchmark: Benchmark = Benchmark.from_toml(config_file)
@@ -31,7 +49,7 @@ def main():
         sys.exit(1)
 
     except tomllib.TOMLDecodeError as e:
-        print(f"Error: Failed to parse TOML file {config_file}:\n{e}")
+        print(f"Error: Failed to parse Config file {config_file}:\n{e}")
         sys.exit(1)
 
     except Exception as e:
@@ -57,7 +75,7 @@ def main():
     if not exec_benchmark(benchmark): # Execute benchmark program
         sys.exit(1)
         
-    try: # Attempt toarse and load benchmark results
+    try: # Attempt to parse and load benchmark results
         data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
     except (FileNotFoundError, pd.errors.ParserError, ValueError) as e:
         print(f"Error loading benchmark data: {e}")

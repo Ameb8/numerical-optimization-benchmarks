@@ -3,7 +3,7 @@ from pathlib import Path
 
 from .models import Benchmark
 
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT: Path = Path.cwd()
 EXEC_PATH: Path = PROJECT_ROOT / 'bin' / 'benchmark'
 RESULTS_ROOT: Path = PROJECT_ROOT / 'results'
 
