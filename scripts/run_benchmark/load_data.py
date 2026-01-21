@@ -4,8 +4,23 @@ import numpy as np
 
 
 def load_benchmark_data(result_dir: Path) -> pd.DataFrame:
-    fitness_df = pd.read_csv(result_dir / 'fitness.csv')
-    time_df = pd.read_csv(result_dir / 'time.csv')
+    fitness_file: Path = result_dir / 'fitness.csv'
+    time_file: Path = result_dir / 'time.csv'
+
+        # Check that files exist
+    if not fitness_file.exists():
+        raise FileNotFoundError(f"Missing fitness CSV: {fitness_file}")
+    if not time_file.exists():
+        raise FileNotFoundError(f"Missing time CSV: {time_file}")
+
+    fitness_df: pd.DataFrame = pd.read_csv(result_dir / 'fitness.csv')
+    time_df: pd.DataFrame = pd.read_csv(result_dir / 'time.csv')
+
+    # Check that CSVs are not empty
+    if fitness_df.empty:
+        raise ValueError(f"fitness.csv is empty: {fitness_file}")
+    if time_df.empty:
+        raise ValueError(f"time.csv is empty: {time_file}")
 
     # Transpose fitness_df so experiments are rows
     fitness_transposed = fitness_df.T

@@ -27,7 +27,7 @@ def compile_benchmark() -> bool:
         return False
 
     # Print compilation results
-    print(f'\n\nCompiling Benchmark Program:\n{result.stdout}')
+    print('\n\nCompiling Benchmark Program' + (f':\n{result.stdout}\n' if result.stdout else "\n"))
 
     if(result.stderr): # Print errors
         print(f'Compilation Errors:\n{result.stderr}')

@@ -49,15 +49,22 @@ def main():
         encoding='utf-8'
     )
 
-    if not compile_benchmark(benchmark): # Compile benchmark program
+    print(f'\nFinal experiment configuration for {benchmark.benchmark_name} written to {benchmark_path}')
+
+    if not compile_benchmark(): # Compile benchmark program
         sys.exit(1)
 
-    if not compile_benchmark(benchmark): # Execute benchmark program
+    if not exec_benchmark(benchmark): # Execute benchmark program
         sys.exit(1)
         
-    
-    # Parse and load benchmark results
-    data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
+    try: # Attempt toarse and load benchmark results
+        data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
+    except (FileNotFoundError, pd.errors.ParserError, ValueError) as e:
+        print(f"Error loading benchmark data: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Unexpected error loading benchmark data: {e}")
+        sys.exit(1)
 
     # Create and save plots
     build_result(data, benchmark , DATA_DIR / benchmark.benchmark_name)
