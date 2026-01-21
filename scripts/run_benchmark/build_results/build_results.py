@@ -10,17 +10,16 @@ from . import plot_builder, build_docs
 
 def plot_fitness_histograms(df: pd.DataFrame, plot_dir: Path, bins: int = 10) -> None:
     for _, row in df.iterrows():
-        experiment_name = row['experiment_name']
-        fitness_values = row['fitness_values']
-
         plot_builder.build_histogram(
-            values=fitness_values,
+            values=row['fitness_values'],
+            mean=row['mean'],
+            std=row['std'],
+            median=row['median'],
             save_dir=plot_dir,
-            filename=f'{experiment_name}_histogram.png',
-            title=f'{experiment_name} Fitness Histogram',
+            filename=f"{row['experiment_name']}_histogram.png",
+            title=f"{row['experiment_name']} Fitness Histogram",
             xlabel='Fitness Value',
-            color='lightgreen',
-            bins=bins
+            bins=bins,
         )
 
 def plot_all_fitness_histogram(df: pd.DataFrame, plot_dir: Path, bins: int = 20) -> None:
@@ -28,6 +27,9 @@ def plot_all_fitness_histogram(df: pd.DataFrame, plot_dir: Path, bins: int = 20)
 
     plot_builder.build_histogram(
         values=all_values,
+        mean = np.mean(all_values),
+        std = np.std(all_values),
+        median = np.median(all_values),
         save_dir=plot_dir,
         filename='all_experiments_fitness_histogram.png',
         title='All Experiments Fitness Histogram',
@@ -63,7 +65,7 @@ def plot_fitness_violins(df: pd.DataFrame, plot_dir: Path) -> None:
 
 
 
-def build_plots(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
+def build_result(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
     plots_dir = result_dir / 'plots'
     plots_dir.mkdir(parents=True, exist_ok=True)
     
@@ -76,4 +78,4 @@ def build_plots(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
     plot_time_bar(df, plots_dir)
 
     # Create document
-    build_docs.build_latex_report(result_dir)
+    build_docs.build_latex_report(df, result_dir)

@@ -6,9 +6,24 @@ import seaborn as sns
 from pathlib import Path
 
 from typing import Optional, Sequence
+'''
+def build_histogram(
+    values: Sequence[float],
+    save_dir: Path,
+    filename: str,
+    title: str,
+    xlabel: str,
+    color: str = 'lightgreen',
+    bins: int = 10,
+    figsize: tuple[int, int] = (6, 5),
+) -> None:
+'''
 
 def build_histogram(
     values: Sequence[float],
+    mean: float,
+    std: float,
+    median: float,
     save_dir: Path,
     filename: str,
     title: str,
@@ -33,10 +48,42 @@ def build_histogram(
         ax=ax
     )
 
-    mean_val = np.mean(values)
-    median_val = np.median(values)
-    ax.axvline(mean_val, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean_val:.2f}')
-    ax.axvline(median_val, color='blue', linestyle='-.', linewidth=2, label=f'Median: {median_val:.2f}')
+    # Mean
+    ax.axvline(
+        mean,
+        color='red',
+        linestyle='-',
+        linewidth=2,
+        label=f'Mean: {mean:.2e}'
+    )
+
+    # Mean - Std
+    ax.axvline(
+        mean - std,
+        color='red',
+        linestyle='--',
+        linewidth=1.8,
+        label='Mean ± Std'
+    )
+
+    # Mean + Std
+    ax.axvline(
+        mean + std,
+        color='red',
+        linestyle='--',
+        linewidth=1.8,
+        label='_nolegend_'
+    )
+
+    # Median
+    ax.axvline(
+        median,
+        color='blue',
+        linestyle='-.',
+        linewidth=2,
+        label=f'Median: {median:.2e}'
+    )
+
     ax.legend()
 
     ax.set_xlabel(xlabel, fontsize=14)

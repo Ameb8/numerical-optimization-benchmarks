@@ -6,7 +6,7 @@ import sys
 from .load_data import load_benchmark_data
 from .models import Benchmark, Experiment
 from .run_experiments import run_benchmark
-from .build_results.build_plots import build_plots
+from .build_results import build_result
 
 
 # Paths to project directories
@@ -42,7 +42,7 @@ def main():
     data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
 
     # Create and save plots
-    build_plots(data, benchmark , DATA_DIR / benchmark.benchmark_name)
+    build_result(data, benchmark , DATA_DIR / benchmark.benchmark_name)
 
 
 if __name__ == "__main__":
