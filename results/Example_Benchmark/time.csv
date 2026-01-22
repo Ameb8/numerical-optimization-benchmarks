@@ -1,0 +1,11 @@
+experiment_name,wall_time
+Schwefel, 1.7724e-05
+DeJong_1, 8.73e-07
+Rosenbrocks_Saddle, 1.253e-06
+Rastrigin, 1.5104e-05
+Griewangk, 2.1747e-05
+Sine_Envelope_Sine_Wave, 1.6206e-05
+Stretched_V_Sine_Wave, 6.436e-05
+Ackley_One, 2.2867e-05
+Ackley_Two, 3.8217e-05
+Egg_Holder, 4.3965e-05

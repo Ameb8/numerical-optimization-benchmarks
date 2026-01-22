@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Benchmark Results}
+\author{Auto-generated}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Fitness Summary Statistics}
+
+\begin{table}[H]
+\centering
+\caption{Summary statistics of fitness values across experiments}
+\label{tab:fitness-summary}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrr}
+\hline
+Experiment & Mean & Std & Median & Min & Max & Range & Time (ms) \\
+\hline
+Schwefel & 1.2531e+04 & 1.2506e+03 & 1.2420e+04 & 8.9930e+03 & 1.4547e+04 & 5.5544e+03 & 0.02 \\
+DeJong\_1 & 1.0346e+05 & 1.4695e+04 & 1.0619e+05 & 7.6623e+04 & 1.3204e+05 & 5.5418e+04 & 0.00 \\
+Rosenbrocks\_Saddle & 6.1694e+10 & 1.4346e+10 & 6.1598e+10 & 3.8417e+10 & 8.9215e+10 & 5.0798e+10 & 0.00 \\
+Rastrigin & 9.6058e+03 & 1.3262e+03 & 9.8200e+03 & 7.2441e+03 & 1.2214e+04 & 4.9695e+03 & 0.02 \\
+Griewangk & 6.4765e+02 & 9.1842e+01 & 6.6468e+02 & 4.7989e+02 & 8.2626e+02 & 3.4636e+02 & 0.02 \\
+Sine\_Envelope\_Sine\_Wave & -2.0704e+01 & 1.0918e+00 & -2.0491e+01 & -2.2734e+01 & -1.8064e+01 & 4.6698e+00 & 0.02 \\
+Stretched\_V\_Sine\_Wave & 9.7030e+01 & 9.3358e+00 & 9.6801e+01 & 8.0492e+01 & 1.1597e+02 & 3.5481e+01 & 0.06 \\
+Ackley\_One & 5.9683e+02 & 4.6201e+01 & 5.9257e+02 & 5.1819e+02 & 7.0543e+02 & 1.8724e+02 & 0.02 \\
+Ackley\_Two & 5.7666e+02 & 1.0485e+01 & 5.7552e+02 & 5.6012e+02 & 5.9512e+02 & 3.5003e+01 & 0.04 \\
+Egg\_Holder & 2.0242e+02 & 1.6582e+03 & 3.9818e+02 & -3.8403e+03 & 4.0776e+03 & 7.9179e+03 & 0.04 \\
+\hline
+\end{tabular}}
+\end{table}
+
+\section{Benchmark Plots}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Ackley_One_histogram.png}
+    \caption{Ackley One Histogram}
+    \label{fig:Ackley-One-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Ackley_One_violin.png}
+    \caption{Ackley One Violin}
+    \label{fig:Ackley-One-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Ackley_Two_histogram.png}
+    \caption{Ackley Two Histogram}
+    \label{fig:Ackley-Two-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Ackley_Two_violin.png}
+    \caption{Ackley Two Violin}
+    \label{fig:Ackley-Two-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/DeJong_1_histogram.png}
+    \caption{Dejong 1 Histogram}
+    \label{fig:DeJong-1-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/DeJong_1_violin.png}
+    \caption{Dejong 1 Violin}
+    \label{fig:DeJong-1-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Egg_Holder_histogram.png}
+    \caption{Egg Holder Histogram}
+    \label{fig:Egg-Holder-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Egg_Holder_violin.png}
+    \caption{Egg Holder Violin}
+    \label{fig:Egg-Holder-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Griewangk_histogram.png}
+    \caption{Griewangk Histogram}
+    \label{fig:Griewangk-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Griewangk_violin.png}
+    \caption{Griewangk Violin}
+    \label{fig:Griewangk-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Rastrigin_histogram.png}
+    \caption{Rastrigin Histogram}
+    \label{fig:Rastrigin-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Rastrigin_violin.png}
+    \caption{Rastrigin Violin}
+    \label{fig:Rastrigin-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Rosenbrocks_Saddle_histogram.png}
+    \caption{Rosenbrocks Saddle Histogram}
+    \label{fig:Rosenbrocks-Saddle-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Rosenbrocks_Saddle_violin.png}
+    \caption{Rosenbrocks Saddle Violin}
+    \label{fig:Rosenbrocks-Saddle-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Schwefel_histogram.png}
+    \caption{Schwefel Histogram}
+    \label{fig:Schwefel-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Schwefel_violin.png}
+    \caption{Schwefel Violin}
+    \label{fig:Schwefel-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Sine_Envelope_Sine_Wave_histogram.png}
+    \caption{Sine Envelope Sine Wave Histogram}
+    \label{fig:Sine-Envelope-Sine-Wave-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Sine_Envelope_Sine_Wave_violin.png}
+    \caption{Sine Envelope Sine Wave Violin}
+    \label{fig:Sine-Envelope-Sine-Wave-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Stretched_V_Sine_Wave_histogram.png}
+    \caption{Stretched V Sine Wave Histogram}
+    \label{fig:Stretched-V-Sine-Wave-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/Stretched_V_Sine_Wave_violin.png}
+    \caption{Stretched V Sine Wave Violin}
+    \label{fig:Stretched-V-Sine-Wave-violin}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/all_experiments_fitness_histogram.png}
+    \caption{All Experiments Fitness Histogram}
+    \label{fig:all-experiments-fitness-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../plots/all_experiments_time.png}
+    \caption{All Experiments Time}
+    \label{fig:all-experiments-time}
+\end{figure}
+
+\end{document}
