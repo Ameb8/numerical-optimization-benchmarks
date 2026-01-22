@@ -79,3 +79,6 @@ def build_result(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
 
     # Create document
     build_docs.build_latex_report(df, result_dir)
+
+    # Inform user of pots/document creation
+    print(f'\nPlots and LaTeX document written to {plots_dir} and {result_dir / "docs"}')

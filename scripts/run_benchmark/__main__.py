@@ -58,7 +58,8 @@ def main():
 
 
     # Path to benchmark config
-    benchmark_path = DATA_DIR / benchmark.benchmark_name / 'benchmark.json'
+    benchmark_dir = DATA_DIR / benchmark.benchmark_name
+    benchmark_path = benchmark_dir / 'benchmark.json'
     benchmark_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Write benchmark config to JSON
@@ -74,6 +75,8 @@ def main():
 
     if not exec_benchmark(benchmark): # Execute benchmark program
         sys.exit(1)
+
+    print(f'\nRaw fitness and execution time values written to {benchmark_dir / "fitness.csv"} and {benchmark_dir / "time.csv"}')
         
     try: # Attempt to parse and load benchmark results
         data: pd.DataFrame = load_benchmark_data(DATA_DIR / benchmark.benchmark_name)
