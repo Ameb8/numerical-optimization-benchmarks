@@ -1,0 +1,86 @@
+# Example benchmark config for running all available functions with large population size
+
+[benchmark]
+benchmark_name = "Large_Population_Benchmark"
+population_size = 1000000
+
+[[experiment]]
+experiment_name = "Schwefel"
+upper_bound = 512.0
+lower_bound = -512.0
+problem_type = 1
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "DeJong_1"
+upper_bound = 100.0
+lower_bound = -100.0
+problem_type = 2
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Rosenbrocks_Saddle"
+upper_bound = 100.0
+lower_bound = -100.0
+problem_type = 3
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Rastrigin"
+upper_bound = 30.0
+lower_bound = -30.0
+problem_type = 4
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Griewangk"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 5
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Sine_Envelope_Sine_Wave"
+upper_bound = 30.0
+lower_bound = -30.0
+problem_type = 6
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Stretched_V_Sine_Wave"
+upper_bound = 30.0
+lower_bound = -30.0
+problem_type = 7
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Ackley_One"
+upper_bound = 32.0
+lower_bound = -32.0
+problem_type = 8
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Ackley_Two"
+upper_bound = 32.0
+lower_bound = -32.0
+problem_type = 9
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "Egg_Holder"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 30
+seed = 108664
+

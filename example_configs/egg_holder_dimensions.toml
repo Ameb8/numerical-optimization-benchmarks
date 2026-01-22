@@ -1,0 +1,69 @@
+# Example benchmark config for running Egg Holder function with 10 - 80 dimensions
+
+[benchmark]
+benchmark_name = "Egg_Holder_Dimensions_Benchmark"
+population_size = 30
+
+[[experiment]]
+experiment_name = "10_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 10
+seed = 108664
+
+[[experiment]]
+experiment_name = "20_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 20
+seed = 108664
+
+[[experiment]]
+experiment_name = "30_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 30
+seed = 108664
+
+[[experiment]]
+experiment_name = "40_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 40
+seed = 108664
+
+[[experiment]]
+experiment_name = "50_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 50
+seed = 108664
+
+[[experiment]]
+experiment_name = "60_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 60
+seed = 108664
+
+[[experiment]]
+experiment_name = "70_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 70
+seed = 108664
+
+[[experiment]]
+experiment_name = "80_Dimensions"
+upper_bound = 500.0
+lower_bound = -500.0
+problem_type = 10
+dimension = 80
+seed = 108664
