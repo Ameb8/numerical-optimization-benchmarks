@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude -O2
+CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude -O3
 
 # Project directories
 SRC_DIR = src
