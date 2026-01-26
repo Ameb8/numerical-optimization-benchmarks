@@ -1,0 +1,309 @@
+\documentclass{article}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref} 
+\usepackage{cleveref}
+\usepackage{parskip}
+\usepackage{booktabs}
+
+% Title page
+\title{Benchmark Results}
+\author{Alex Buckley}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+\tableofcontents
+
+\newpage
+\listoffigures
+
+\newpage
+\listoftables
+\newpage
+
+\section{Overview}
+
+Standard benchmark functions provide a normalized method of evaluating optimization algorithms. The known characteristics of the various functions allows experiments which target and test specific aspects of optimization and convergence algorithms.
+
+\subsection{Purpose}
+
+In this benchmark, we analyze the properties and characteristics of a selection of 10 standard benchmark functions. Functions are input pseudo-random values within set bounds, producing fitness results. In this experiment, a population size of 30, as well as 30 dimensions. The pseudo-random inputs ar generated with an external mersenne-twister implementation with a seed of $108664$. 
+
+Populations for each function in this experiment were generated with the same seed, however, the tested functions have different sensible domains. Thus, while the initial generated values are identical for each function, they are independently scaled to match the appropriate range of input values. Exact bounds used for each function can be seen in \cref{tab:population_bounds}.
+
+\begin{table}[ht]
+\centering
+\caption{Population bounds for all experiments}
+\label{tab:population_bounds}
+\begin{tabular}{lcc}
+\toprule
+Experiment & Lower Bound & Upper Bound \\
+\midrule
+Schwefel & -512.0 & 512.0 \\
+DeJong\_1 & -100.0 & 100.0 \\
+Rosenbrocks\_Saddle & -100.0 & 100.0 \\
+Rastrigin & -30.0 & 30.0 \\
+Griewangk & -500.0 & 500.0 \\
+Sine\_Envelope\_Sine\_Wave & -30.0 & 30.0 \\
+Stretched\_V\_Sine\_Wave & -30.0 & 30.0 \\
+Ackley\_One & -32.0 & 32.0 \\
+Ackley\_Two & -32.0 & 32.0 \\
+Egg\_Holder & -500.0 & 500.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Experiment Results}
+
+\subsection{Fitness Values}
+
+\cref{tab:fitness-summary} summarizes the fitness distributions across all tested standard benchmark functions. Rosenbrock's Saddle shows extremely high values and variability, while Sine Envelope Sine Wave produces tightly clustered negative values with minimal spread. General trends in fitness across different benchmark functions help provide insight into behaviors.
+
+\begin{table}[H]
+\centering
+\caption{Summary statistics of fitness values across experiments}
+\label{tab:fitness-summary}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrr}
+\hline
+Experiment & Mean & Std & Median & Min & Max & Range & Time (ms) \\
+\hline
+Schwefel & 1.2531e+04 & 1.2506e+03 & 1.2420e+04 & 8.9930e+03 & 1.4547e+04 & 5.5544e+03 & 0.02 \\
+DeJong\_1 & 1.0346e+05 & 1.4695e+04 & 1.0619e+05 & 7.6623e+04 & 1.3204e+05 & 5.5418e+04 & 0.00 \\
+Rosenbrocks\_Saddle & 6.1694e+10 & 1.4346e+10 & 6.1598e+10 & 3.8417e+10 & 8.9215e+10 & 5.0798e+10 & 0.00 \\
+Rastrigin & 9.6058e+03 & 1.3262e+03 & 9.8200e+03 & 7.2441e+03 & 1.2214e+04 & 4.9695e+03 & 0.02 \\
+Griewangk & 6.4765e+02 & 9.1842e+01 & 6.6468e+02 & 4.7989e+02 & 8.2626e+02 & 3.4636e+02 & 0.03 \\
+Sine\_Envelope\_Sine\_Wave & -2.0704e+01 & 1.0918e+00 & -2.0491e+01 & -2.2734e+01 & -1.8064e+01 & 4.6698e+00 & 0.02 \\
+Stretched\_V\_Sine\_Wave & 9.7030e+01 & 9.3358e+00 & 9.6801e+01 & 8.0492e+01 & 1.1597e+02 & 3.5481e+01 & 0.06 \\
+Ackley\_One & 5.9683e+02 & 4.6201e+01 & 5.9257e+02 & 5.1819e+02 & 7.0543e+02 & 1.8724e+02 & 0.02 \\
+Ackley\_Two & 5.7666e+02 & 1.0485e+01 & 5.7552e+02 & 5.6012e+02 & 5.9512e+02 & 3.5003e+01 & 0.04 \\
+Egg\_Holder & 2.0242e+02 & 1.6582e+03 & 3.9818e+02 & -3.8403e+03 & 4.0776e+03 & 7.9179e+03 & 0.03 \\
+\hline
+\end{tabular}}
+\end{table}
+
+\subsection{Execution Time}
+
+Wall-clock execution time for evaluating standard benchmark functions with pseudo-random populations can be seen in \cref{fig:all-experiments-time}. Execution time seems to increase and decrease relative to the types of operations found within the function. For example, Stretched V Sine Wave took notably longer to execute than any other tested function. This function also contains 2 higher-index roots within the summation. This is a multi-instruction expression for thee system to calculate, likely with significant overhead compared to operations like adding, multiplication, and even square roots. Because the summation runs an iteration for each dimension, in this benchmark, Stretched V Sine Wave was required to calculate 60 higher-indexed root operations. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/all_experiments_time.png}
+    \caption{All Experiments Time}
+    \label{fig:all-experiments-time}
+\end{figure}
+
+Ackley's Two was the second slowest function to evaluate. While this function does not contain any higher-index roots, it does have a fairly complicated summation body, requiring calculation of a square root, two floating-point exponent, and two trig functions. These operations are fairly expensive, and must all be calculated 30 times, once for each dimension.
+
+On the other end of the spectrum, we observe the DeJong 1 Function to have the fastest evaluation time. This is unsurprising, as this function only requires a single multiplication operation for each summation loop. Trailing closely behind in evaluation speed is Rosenbrock's Saddle. While Rosenbrock's Saddle's summation loop is not quite as simple as DeJong 1, it still only requires a minimum of 4 multiplications and 3 additions/subtractions each summation loop (depending on exact implementation). This lack of more complicated operations is likely a large factor in the rapid execution speed. Overall, the number and type of operations iwthin each function's summation loop seems to be the primary factor in evaluation time of the function. 
+
+
+\section{Function Characteristic}
+
+\subsection{Ackley's One}
+
+Inputting pseudo-randomly generated data into Ackley's One function consistently produced right-skewed data. The results Mean being larger than the median demonstrates this, as shown in \cref{fig:Ackley-One-histogram}. Additionally, \cref{fig:Ackley-One-violin} visually demonstrates the skew towards higher fitness values.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Ackley_One_histogram.png}
+    \caption{Ackley One Histogram}
+    \label{fig:Ackley-One-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Ackley_One_violin.png}
+    \caption{Ackley One Violin}
+    \label{fig:Ackley-One-violin}
+\end{figure}
+
+\subsection{Ackley's Two}
+
+
+\cref{fig:Ackley-Two-histogram} demonstrates the notably flat distribution of fitness values, indicting the fitness values tend to vary significantly from the median. We can see that as fitness shrinks or grows from the center, frequency tends to remain fairly stable until exceeding the lower and upper quartiles. The data is not heavily skewed, but \cref{fig:Ackley-Two-violin} shows a slight skew towards higher fitness values. For example, we see a flatter curve above the median then below. Additionally, the 3rd quartile covers a much wider range of fitness values then the 2nd quartile. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Ackley_Two_histogram.png}
+    \caption{Ackley Two Histogram}
+    \label{fig:Ackley-Two-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Ackley_Two_violin.png}
+    \caption{Ackley Two Violin}
+    \label{fig:Ackley-Two-violin}
+\end{figure}
+
+\subsection{DeJong One}
+
+\cref{fig:DeJong-1-histogram} shows a strong skew to the left among fitness values. This is reinforced by the significant variation in distance from mean to the first and 3rd quartiles seen in \cref{fig:DeJong-1-violin}. The DeJong 1 function shows a fairly wide spread, having the 2nd highest range out of any of the tested functions, as seen in \cref{tab:fitness-summary}. Additionally, \cref{fig:all-experiments-time} shows that it is the second fastest function to execute, likely due to its simplicity. Despite the function's simplicity, fitness results hav the second largest standard deviation out of any of the tested functions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/DeJong_1_histogram.png}
+    \caption{Dejong 1 Histogram}
+    \label{fig:DeJong-1-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/DeJong_1_violin.png}
+    \caption{Dejong 1 Violin}
+    \label{fig:DeJong-1-violin}
+\end{figure}
+
+\subsection{Egg Holder}
+
+The most notable characteristic of th Egg Holder Function's fitness values is their leptokurtic nature. \cref{fig:Egg-Holder-violin} demonstrates the tight grouping fitness values have around the mean, with the lower and upper quartiles being especially centralized. Additionally, a slight tail-skew can be seen in \cref{fig:Egg-Holder-histogram}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Egg_Holder_histogram.png}
+    \caption{Egg Holder Histogram}
+    \label{fig:Egg-Holder-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Egg_Holder_violin.png}
+    \caption{Egg Holder Violin}
+    \label{fig:Egg-Holder-violin}
+\end{figure}
+
+\subsection{Griewangk} 
+
+The left-skewed and high kurtosis of fitness values for the Griewangk function is demonstrated by the distribution curve seen in \cref{fig:Griewangk-histogram}. The significantly larger gap between mean and the lower quartile versus between mean and upper quartile seen in \cref{fig:Griewangk-violin} further display the Griewangk function's tendency to produce left-skewed fitness values. When compared to other tested standard benchmark functions, Griewangk produces somewhat average results for standard deviation and range of fitness values, as well as execution time, as seen in \cref{tab:fitness-summary}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Griewangk_histogram.png}
+    \caption{Griewangk Histogram}
+    \label{fig:Griewangk-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Griewangk_violin.png}
+    \caption{Griewangk Violin}
+    \label{fig:Griewangk-violin}
+\end{figure}
+
+\subsection{Rastrigin}
+
+Similar to many of the tested standard benchmark functions, the Rastrigin function tends to produce fitness values skewed to the left. This can be seen in the flatter left side of the distribution curve in \cref{fig:Rastrigin-histogram} and the comparatively large gap between mean and the lower-quartile in \cref{fig:Rastrigin-violin}. Additionally, \cref{fig:Rastrigin-violin} demonstrates the significantly higher occurrences of fitness values near the lower end of produced fitness range compared to the higher end. This is demonstrated by the more pointed top of the violin plot compared to the more rounded bottom.
+
+Compared to other tested standard benchmark functions, the Rastrigin function experienced fast execution. \cref{fig:all-experiments-time} shows only two functions executing more quickly. However, \cref{tab:fitness-summary} shows that the gap between the fastest executing functions and Rastrigin is large, with DeJong 1 and Rosenbrock's saddle executing in less than 0.005 ms, while Rastrigin took approximately 0.02 ms to executes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Rastrigin_histogram.png}
+    \caption{Rastrigin Histogram}
+    \label{fig:Rastrigin-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Rastrigin_violin.png}
+    \caption{Rastrigin Violin}
+    \label{fig:Rastrigin-violin}
+\end{figure}
+
+\subsection{Rosenbrock's Saddle}
+
+Fitness values produced by Rosenbrock's Saddle demonstrate the aptness of the function name, with the distribution curve seen in \cref{fig:Rosenbrocks-Saddle-histogram} showing a clear saddle-like distribution shape. Frequency immediately begins to decrease as fitness decreases from the distributions peak, until about $5e^{10}$, where frequency stabilizes. \cref{fig:Rosenbrocks-Saddle-violin} shows the secondary distribution peak, or 'saddle', exists near the lower quartile. This function behavior causes existence of local minima and maximums, making this function a very good choice for testing how well convergence or optimization algorithms handle local minima and maximums. 
+
+\cref{fig:all-experiments-time} shows Rosenbrock's saddle as the second fastest function to execute, slightly trailing DeJong 1. This is likely due to the relative simplicity of the  Rosenbrock's Saddle equation. While not as straightforward as DeJong 1, Rosenbrock's Saddle is still free of trigonometry functions, square roots, and floating-point divisions. Every mathematical operation in this function can be programmed as addition or multiplication, allowing for rapid calculation, as these operations have significantly less overhead than something like $\cos{x}$ or  $\sqrt{x}$.
+
+In addition to rapid execution, Rosenbrock's Saddle produces a wider range of fitness values than other tested functions. \cref{tab:fitness-summary} shows the range of Rosenbrock's saddle as 6 orders of magnitude greater than the range of any other tested function. The standard deviation of fitness values is similarly 6 orders of magnitude greater than any other tested function's standard deviation. Additionally, the resulting fitness values are consistently larger than those of other tested functions. Even with the huge range compared to other functions, The minimum fitness value observed from Rosenbrock's Saddle experiment is 5 orders of magnitude greater than the maximum fitness value observed from any other function.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Rosenbrocks_Saddle_histogram.png}
+    \caption{Rosenbrocks Saddle Histogram}
+    \label{fig:Rosenbrocks-Saddle-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Rosenbrocks_Saddle_violin.png}
+    \caption{Rosenbrocks Saddle Violin}
+    \label{fig:Rosenbrocks-Saddle-violin}
+\end{figure}
+
+\subsection{Schwefel}
+
+Fitness values observed from the Schwefel function appear to have fairly low kurtosis. \cref{fig:Schwefel-histogram} shows frequency quickly dropping as fitness values stray from the median. This drop off is especially noticeable on the lower end of fitness values. However, once sufficiently far from the median fitness value in either direction, frequency experiences a local maxima. The intensity of this maxima is greater on the higher end. While the frequency spike in the lower end is not as significant, it is notably further from the median than on the higher end.
+
+\cref{fig:Schwefel-violin} further demonstrates the unique distribution of fitness values observed in this function, showing that distribution drops of fairly steadily when fitness values are greater than the median, with a spike just outside of the upper quartile. As fitness value decreases, frequency drops rapidly. That is, however, until far outside the lower-quartile, where frequency spikes. The elongated tail seen in \cref{fig:Schwefel-violin} demonstrates the unusual nature of this lower-quartile behavior.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Schwefel_histogram.png}
+    \caption{Schwefel Histogram}
+    \label{fig:Schwefel-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Schwefel_violin.png}
+    \caption{Schwefel Violin}
+    \label{fig:Schwefel-violin}
+\end{figure}
+
+\subsection{Sine Envelope Sine Wave}
+
+The Sine Envelope Sine Wave function produced tightly-grouped fitness values compared to the other tested functions producing the smallest range of fitness values. For example, \cref{tab:fitness-summary} shows the range of the Ackley's Two function, which has the second smallest range, as being over 7 times larger than Sine Envelope Sine Wave's range. This function also produced the smallest standard deviation of fitness values out of all tested functions, with the small range in fitness values likely playing a role in this. Additionally, this is the only tested benchmark function to produce only negative fitness values.
+
+\cref{fig:Sine-Envelope-Sine-Wave-histogram} shows the tail-skewed nature of fitness values, with frequency dropping off faster when fitness is greater than the median. The smooth and gradual decrease of frequency as fitness decreases from mean can be seen in \cref{fig:Sine-Envelope-Sine-Wave-violin}. However, as fitness increases from the mean, we observe a short and rapid drop in frequency until well past the upper quartile, where frequency then dwindles more casually. This is further reinforced by the very small step from the mean to the upper quartile compared to the mean to the lower quartile. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Sine_Envelope_Sine_Wave_histogram.png}
+    \caption{Sine Envelope Sine Wave Histogram}
+    \label{fig:Sine-Envelope-Sine-Wave-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Sine_Envelope_Sine_Wave_violin.png}
+    \caption{Sine Envelope Sine Wave Violin}
+    \label{fig:Sine-Envelope-Sine-Wave-violin}
+\end{figure}
+
+\subsection{Stretched V Sine Wave}
+
+One notable characteristic of fitness values produced by the Sttretched V Sine Wave function is fairly high kurtosis, as seen in the flattened distribution curve in \cref{fig:Stretched-V-Sine-Wave-histogram}. As fitness values decrease from the median, frequency decreases slowly. Alternately, as fitness increases, frequency experiences a slower initial drop off, reducing more drastically after the upper quartile. This is demonstrated by the concave shape at the top of the violin plot compared to the convex shape at the bottom, as seen in \cref{fig:Stretched-V-Sine-Wave-violin}. This further indicates the delayed but then more rapid drop off of frequency as fitness increases versus decreases.
+
+\cref{tab:fitness-summary} Demonstrates the relatively small range of fitness values produced by the Stretched V Sine Wave function. Additionally, this function produced fitness values with the second lowest standard deviation out of any tested function. Additionally, \cref{fig:all-experiments-time} shows this function's slow evaluation. Execution time for the Stretched V Sine Wave function is notably slower than any of the other tested functions. This is likely due to the multiple higher-index radicals that must be calculated for each summation. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Stretched_V_Sine_Wave_histogram.png}
+    \caption{Stretched V Sine Wave Histogram}
+    \label{fig:Stretched-V-Sine-Wave-histogram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{./plots/Stretched_V_Sine_Wave_violin.png}
+    \caption{Stretched V Sine Wave Violin}
+    \label{fig:Stretched-V-Sine-Wave-violin}
+\end{figure}
+
+
+
+\end{document}
+
+
