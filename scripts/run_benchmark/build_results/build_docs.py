@@ -50,38 +50,6 @@ Experiment & Mean & Std & Median & Min & Max & Range & Time (ms) \\
 \end{tabular}}
 \end{table}
 """)
-    
-def write_full_fitness_table(f, df: pd.DataFrame) -> None:
-    max_runs = max(len(v) for v in df["fitness_values"])
-
-    col_spec = "l" + "r" * max_runs
-
-    f.write(r"""
-\section{Raw Fitness Values}
-
-\begin{table}[H]
-\centering
-\caption{Raw fitness values for each experiment}
-\label{tab:fitness-raw}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{%s}
-\hline
-Experiment""" % col_spec)
-
-    for i in range(max_runs):
-        f.write(f" & Run {i+1}")
-    f.write(r" \\ \hline" + "\n")
-
-    for _, row in df.iterrows():
-        f.write(row["experiment_name"])
-        for val in row["fitness_values"]:
-            f.write(f" & {val:.4e}")
-        f.write(r" \\" + "\n")
-
-    f.write(r"""\hline
-\end{tabular}}
-\end{table}
-""")
 
 
 def build_latex_report(
@@ -120,6 +88,7 @@ def build_latex_report(
 
         # Write fitness tables
         write_fitness_summary_table(f, df)
+        #write_per_experiment_tables(f, df)
 
         # Write figures header
         f.write("\n\\section{Benchmark Plots}\n")
