@@ -137,6 +137,16 @@ On the other end of the spectrum, we observe the DeJong 1 Function to have the f
 
 \subsection{Ackley's One}
 
+\[
+f_8(\mathbf{x}) =
+\sum_{i=1}^{n-1}
+\left[
+\frac{1}{e^{0.2}} \sqrt{x_i^2 + x_{i+1}^2}
++ 3\left(\cos(2x_i) + \sin(2x_{i+1})\right)
+\right]
+\]
+
+
 The Ackley function is a common benchmark in optimization literature \cite{ackley1987}. Inputting pseudo-randomly generated data into the function consistently produced right-skewed data. The results Mean being larger than the median demonstrates this, as shown in \cref{fig:Ackley-One-histogram}. Additionally, \cref{fig:Ackley-One-violin} visually demonstrates the skew towards higher fitness values.
 
 \begin{figure}[H]
@@ -154,6 +164,16 @@ The Ackley function is a common benchmark in optimization literature \cite{ackle
 \end{figure}
 
 \subsection{Ackley's Two}
+
+\[
+f_9(\mathbf{x}) =
+\sum_{i=1}^{n-1}
+\left[
+20 + e
+- 20 e^{-0.2 \sqrt{\frac{x_i^2 + x_{i+1}^2}{2}}}
+- e^{0.5\left[\cos(2\pi x_i) + \cos(2\pi x_{i+1})\right]}
+\right]
+\]
 
 
 \cref{fig:Ackley-Two-histogram} demonstrates the notably flat distribution of fitness values, indicting the fitness values tend to vary significantly from the median. We can see that as fitness shrinks or grows from the center, frequency tends to remain fairly stable until exceeding the lower and upper quartiles. The data is not heavily skewed, but \cref{fig:Ackley-Two-violin} shows a slight skew towards higher fitness values. For example, we see a flatter curve above the median then below. Additionally, the 3rd quartile covers a much wider range of fitness values then the 2nd quartile. 
@@ -174,6 +194,11 @@ The Ackley function is a common benchmark in optimization literature \cite{ackle
 
 \subsection{DeJong One}
 
+\[
+f_2(\mathbf{x}) = \sum_{i=1}^{n} x_i^2
+\]
+
+
 DeJong One provides a very simple convex function to test convergence on \cite{molga2005}. \cref{fig:DeJong-1-histogram} shows a strong skew to the left among fitness values. This is reinforced by the significant variation in distance from mean to the first and 3rd quartiles seen in \cref{fig:DeJong-1-violin}. The DeJong 1 function shows a fairly wide spread, having the 2nd highest range out of any of the tested functions, as seen in \cref{tab:fitness-summary}. Additionally, \cref{fig:all-experiments-time} shows that it is the second fastest function to execute, likely due to its simplicity. Despite the function's simplicity, fitness results hav the second largest standard deviation out of any of the tested functions.
 
 \begin{figure}[H]
@@ -191,6 +216,17 @@ DeJong One provides a very simple convex function to test convergence on \cite{m
 \end{figure}
 
 \subsection{Egg Holder}
+
+\[
+f_{10}(\mathbf{x}) =
+\sum_{i=1}^{n-1}
+\left[
+- x_i \sin\left(\sqrt{|x_i - x_{i+1} - 47|}\right)
+- (x_{i+1} + 47)
+\sin\left(\sqrt{\left|x_{i+1} + 47 + \frac{x_i}{2}\right|}\right)
+\right]
+\]
+
 
 The most notable characteristic of th Egg Holder Function's fitness values is their leptokurtic nature. \cref{fig:Egg-Holder-violin} demonstrates the tight grouping fitness values have around the mean, with the lower and upper quartiles being especially centralized. Additionally, a slight tail-skew can be seen in \cref{fig:Egg-Holder-histogram}. 
 
@@ -210,6 +246,12 @@ The most notable characteristic of th Egg Holder Function's fitness values is th
 
 \subsection{Griewangk} 
 
+\[
+f_5(\mathbf{x}) = 1 + \sum_{i=1}^{n} \frac{x_i^2}{4000}
+- \prod_{i=1}^{n} \cos\left(\frac{x_i}{\sqrt{i}}\right)
+\]
+
+
 The left-skewed and high kurtosis of fitness values for the Griewangk function is demonstrated by the distribution curve seen in \cref{fig:Griewangk-histogram}. The significantly larger gap between mean and the lower quartile versus between mean and upper quartile seen in \cref{fig:Griewangk-violin} further display the Griewangk function's tendency to produce left-skewed fitness values. When compared to other tested standard benchmark functions, Griewangk produces somewhat average results for standard deviation and range of fitness values, as well as execution time, as seen in \cref{tab:fitness-summary}.
 
 \begin{figure}[H]
@@ -227,6 +269,11 @@ The left-skewed and high kurtosis of fitness values for the Griewangk function i
 \end{figure}
 
 \subsection{Rastrigin}
+
+\[
+f_4(\mathbf{x}) = 10n + \sum_{i=1}^{n} \left[ x_i^2 - 10\cos(2\pi x_i) \right]
+\]
+
 
 Similar to many of the tested standard benchmark functions, the Rastrigin function tends to produce fitness values skewed to the left. This can be seen in the flatter left side of the distribution curve in \cref{fig:Rastrigin-histogram} and the comparatively large gap between mean and the lower-quartile in \cref{fig:Rastrigin-violin}. Additionally, \cref{fig:Rastrigin-violin} demonstrates the significantly higher occurrences of fitness values near the lower end of produced fitness range compared to the higher end. This is demonstrated by the more pointed top of the violin plot compared to the more rounded bottom.
 
@@ -247,6 +294,11 @@ Compared to other tested standard benchmark functions, the Rastrigin function ex
 \end{figure}
 
 \subsection{Rosenbrock's Saddle}
+
+\[
+f_3(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100\left(x_i^2 - x_{i+1} \right)^2 + (1 - x_i)^2 \right]
+\]
+
 
 Rosenbrock’s Saddle is useful for testing algorithms due to its curved valley and local minima structure \cite{rosenbrock1960}. Fitness values produced by Rosenbrock's Saddle demonstrate the aptness of the function name, with the distribution curve seen in \cref{fig:Rosenbrocks-Saddle-histogram} showing a clear saddle-like distribution shape. Frequency immediately begins to decrease as fitness decreases from the distributions peak, until about $5e^{10}$, where frequency stabilizes. \cref{fig:Rosenbrocks-Saddle-violin} shows the secondary distribution peak, or 'saddle', exists near the lower quartile. This function behavior causes existence of local minima and maximums, making this function a very good choice for testing how well convergence or optimization algorithms handle local minima and maximums. 
 
@@ -270,6 +322,11 @@ In addition to rapid execution, Rosenbrock's Saddle produces a wider range of fi
 
 \subsection{Schwefel}
 
+\[
+f_1(\mathbf{x}) = 418.9829\,n - \sum_{i=1}^{n} x_i \sin\left(\sqrt{|x_i|}\right)
+\]
+
+
 The Schwefel function has a complex nature, containing many local minima \cite{schwefel_sfu}. This makes it very useful in analyzing how well an optimization algorithm handles local minima when searching for the global minima. Fitness values observed from the Schwefel function appear to have fairly low kurtosis. \cref{fig:Schwefel-histogram} shows frequency quickly dropping as fitness values stray from the median. This drop off is especially noticeable on the lower end of fitness values. However, once sufficiently far from the median fitness value in either direction, frequency experiences a local maxima. The intensity of this maxima is greater on the higher end. While the frequency spike in the lower end is not as significant, it is notably further from the median than on the higher end.
 
 \cref{fig:Schwefel-violin} further demonstrates the unique distribution of fitness values observed in this function, showing that distribution drops of fairly steadily when fitness values are greater than the median, with a spike just outside of the upper quartile. As fitness value decreases, frequency drops rapidly. That is, however, until far outside the lower-quartile, where frequency spikes. The elongated tail seen in \cref{fig:Schwefel-violin} demonstrates the unusual nature of this lower-quartile behavior.
@@ -290,6 +347,14 @@ The Schwefel function has a complex nature, containing many local minima \cite{s
 
 \subsection{Sine Envelope Sine Wave}
 
+\[
+f_6(\mathbf{x}) =
+- \sum_{i=1}^{n-1}
+0.5 + \frac{\sin^2\left(x_i^2 + x_{i+1}^2 - 0.5\right)}
+{\left[1 + 0.001\left(x_i^2 + x_{i+1}^2\right)\right]^2}
+\]
+
+
 The Sine Envelope Sine Wave function produced tightly-grouped fitness values compared to the other tested functions producing the smallest range of fitness values. For example, \cref{tab:fitness-summary} shows the range of the Ackley's Two function, which has the second smallest range, as being over 7 times larger than Sine Envelope Sine Wave's range. This function also produced the smallest standard deviation of fitness values out of all tested functions, with the small range in fitness values likely playing a role in this. Additionally, this is the only tested benchmark function to produce only negative fitness values.
 
 \cref{fig:Sine-Envelope-Sine-Wave-histogram} shows the tail-skewed nature of fitness values, with frequency dropping off faster when fitness is greater than the median. The smooth and gradual decrease of frequency as fitness decreases from mean can be seen in \cref{fig:Sine-Envelope-Sine-Wave-violin}. However, as fitness increases from the mean, we observe a short and rapid drop in frequency until well past the upper quartile, where frequency then dwindles more casually. This is further reinforced by the very small step from the mean to the upper quartile compared to the mean to the lower quartile. 
@@ -309,6 +374,17 @@ The Sine Envelope Sine Wave function produced tightly-grouped fitness values com
 \end{figure}
 
 \subsection{Stretched V Sine Wave}
+
+\[
+f_7(\mathbf{x}) =
+\sum_{i=1}^{n-1}
+\left[
+\left(x_i^2 + x_{i+1}^2\right)^{1/4}
+\sin^2\left(50\left(x_i^2 + x_{i+1}^2\right)^{1/10}\right)
++ 1
+\right]
+\]
+
 
 One notable characteristic of fitness values produced by the Sttretched V Sine Wave function is fairly high kurtosis, as seen in the flattened distribution curve in \cref{fig:Stretched-V-Sine-Wave-histogram}. As fitness values decrease from the median, frequency decreases slowly. Alternately, as fitness increases, frequency experiences a slower initial drop off, reducing more drastically after the upper quartile. This is demonstrated by the concave shape at the top of the violin plot compared to the convex shape at the bottom, as seen in \cref{fig:Stretched-V-Sine-Wave-violin}. This further indicates the delayed but then more rapid drop off of frequency as fitness increases versus decreases.
 
