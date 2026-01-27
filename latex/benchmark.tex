@@ -20,6 +20,12 @@
 \begin{document}
 \maketitle
 
+\begin{abstract}
+
+This report evaluates the statistical characteristics and execution performance of ten standard benchmark functions using pseudo-random input populations. A population of 30 individuals was generated using an external Mersenne Twister implementation with a fixed seed, and scaled to match each function’s defined input bounds. Fitness values were analyzed through summary statistics and distribution visualizations, revealing distinct behaviors across functions, such as high variability in Rosenbrock’s Saddle and tightly clustered negative values in the Sine Envelope Sine Wave. Execution time was also measured, demonstrating that computational complexity of the function expressions strongly influences evaluation speed. The findings provide foundational insight into function landscapes and performance implications, which can guide selection and tuning of optimization algorithms in future work.
+
+\end{abstract}
+
 \newpage
 \tableofcontents
 
@@ -36,7 +42,7 @@ Standard benchmark functions provide a normalized method of evaluating optimizat
 
 \subsection{Purpose}
 
-In this benchmark, we analyze the properties and characteristics of a selection of 10 standard benchmark functions. Functions are input pseudo-random values within set bounds, producing fitness results. In this experiment, a population size of 30, as well as 30 dimensions. The pseudo-random inputs ar generated with an external mersenne-twister implementation with a seed of $108664$. 
+In this benchmark, we analyze the properties and characteristics of a selection of 10 standard benchmark functions. Functions are input pseudo-random values within set bounds, producing fitness results. In this experiment, a population size of 30, as well as 30 dimensions. The pseudo-random inputs ar generated with an external Mersenne Twister implementation with a seed of $108664$. The characteristics of each function's resulting fitness values help provide insight into the behavior and characteristics of each function. While convergence and optimization methods are not used in this experiment, understanding the behavior of functions helps to understand performance of optimization algorithms across differing functions.
 
 Populations for each function in this experiment were generated with the same seed, however, the tested functions have different sensible domains. Thus, while the initial generated values are identical for each function, they are independently scaled to match the appropriate range of input values. Exact bounds used for each function can be seen in \cref{tab:population_bounds}.
 
@@ -62,9 +68,29 @@ Egg\_Holder & -500.0 & 500.0 \\
 \end{tabular}
 \end{table}
 
-\section{Experiment Results}
 
-\subsection{Fitness Values}
+\section{Experiment}
+
+\subsection{Benchmark Environment}
+
+As execution time makes up a portion of the experiment, Understanding the environment the experiment was run in is crucial. The hardware and software used to run the program can have aa very large effect on the execution times of the benchmarks.
+
+\subsubsection{Hardware Environment}
+
+In order to provide reliable results, various methods were used to provide consistency across program runs of the C++ benchmark program. The experiment was conducted with the laptop plugged in and fully charged, with energy-saving mode disabled. Additionally, the benchmark benchmarks were performed with all other apps closed and a CPU temperature validaated to be under 60° C. Furthermore, the \texttt{sudo renice -n -20 -p \$\$} command was executed in the terminal before launching the program. This sets the scheduling priority of the terminal to maximum, potentially reducing the amount of CPU time used by other processes during benchmarking. 
+
+\subsubsection{Hardware Specifications}
+
+All benchmarks were run on a 2018 MacBook Pro running the Sonoma 14.6.1 operating system with a single 2.3 GHz Quad-Core Intel i5 processor. This processor has 4 physical cores, and 8 logical cores, as Hyper-Threading is enabled. Each physical core has access to two L1 caches of 32 KB each, one for instructions and one for data. Additionally, each core has a 256 KB L2 cache, while all cores share a 6 MB L3 cache. 
+The device has 16 GB of LPDDR3 RAM spread across two equally sized banks. Additionally, the memory has a clock speed of 2133 MHz and does not support ECC (error-correcting code).
+
+\subsubsection{Timing Excution}
+
+This benchmark includes analysis of execution time of the tested functions. Each tested functions outputs 1 single time value alongside its fitness values. The result simply measures the wall-clock time to calculate all fitness values. That is, the combined evaluation time of all members of the population. Population generation and experiment initialization are not included in evaluation time.
+
+\subsection{Results}
+
+\subsubsection{Fitness Values}
 
 \cref{tab:fitness-summary} summarizes the fitness distributions across all tested standard benchmark functions. Rosenbrock's Saddle shows extremely high values and variability, while Sine Envelope Sine Wave produces tightly clustered negative values with minimal spread. General trends in fitness across different benchmark functions help provide insight into behaviors.
 
@@ -91,7 +117,7 @@ Egg\_Holder & 2.0242e+02 & 1.6582e+03 & 3.9818e+02 & -3.8403e+03 & 4.0776e+03 & 
 \end{tabular}}
 \end{table}
 
-\subsection{Execution Time}
+\subsubsection{Execution Time}
 
 Wall-clock execution time for evaluating standard benchmark functions with pseudo-random populations can be seen in \cref{fig:all-experiments-time}. Execution time seems to increase and decrease relative to the types of operations found within the function. For example, Stretched V Sine Wave took notably longer to execute than any other tested function. This function also contains 2 higher-index roots within the summation. This is a multi-instruction expression for thee system to calculate, likely with significant overhead compared to operations like adding, multiplication, and even square roots. Because the summation runs an iteration for each dimension, in this benchmark, Stretched V Sine Wave was required to calculate 60 higher-indexed root operations. 
 
@@ -111,7 +137,7 @@ On the other end of the spectrum, we observe the DeJong 1 Function to have the f
 
 \subsection{Ackley's One}
 
-Inputting pseudo-randomly generated data into Ackley's One function consistently produced right-skewed data. The results Mean being larger than the median demonstrates this, as shown in \cref{fig:Ackley-One-histogram}. Additionally, \cref{fig:Ackley-One-violin} visually demonstrates the skew towards higher fitness values.
+The Ackley function is a common benchmark in optimization literature \cite{ackley1987}. Inputting pseudo-randomly generated data into the function consistently produced right-skewed data. The results Mean being larger than the median demonstrates this, as shown in \cref{fig:Ackley-One-histogram}. Additionally, \cref{fig:Ackley-One-violin} visually demonstrates the skew towards higher fitness values.
 
 \begin{figure}[H]
     \centering
@@ -148,7 +174,7 @@ Inputting pseudo-randomly generated data into Ackley's One function consistently
 
 \subsection{DeJong One}
 
-\cref{fig:DeJong-1-histogram} shows a strong skew to the left among fitness values. This is reinforced by the significant variation in distance from mean to the first and 3rd quartiles seen in \cref{fig:DeJong-1-violin}. The DeJong 1 function shows a fairly wide spread, having the 2nd highest range out of any of the tested functions, as seen in \cref{tab:fitness-summary}. Additionally, \cref{fig:all-experiments-time} shows that it is the second fastest function to execute, likely due to its simplicity. Despite the function's simplicity, fitness results hav the second largest standard deviation out of any of the tested functions.
+DeJong One provides a very simple convex function to test convergence on \cite{molga2005}. \cref{fig:DeJong-1-histogram} shows a strong skew to the left among fitness values. This is reinforced by the significant variation in distance from mean to the first and 3rd quartiles seen in \cref{fig:DeJong-1-violin}. The DeJong 1 function shows a fairly wide spread, having the 2nd highest range out of any of the tested functions, as seen in \cref{tab:fitness-summary}. Additionally, \cref{fig:all-experiments-time} shows that it is the second fastest function to execute, likely due to its simplicity. Despite the function's simplicity, fitness results hav the second largest standard deviation out of any of the tested functions.
 
 \begin{figure}[H]
     \centering
@@ -222,7 +248,7 @@ Compared to other tested standard benchmark functions, the Rastrigin function ex
 
 \subsection{Rosenbrock's Saddle}
 
-Fitness values produced by Rosenbrock's Saddle demonstrate the aptness of the function name, with the distribution curve seen in \cref{fig:Rosenbrocks-Saddle-histogram} showing a clear saddle-like distribution shape. Frequency immediately begins to decrease as fitness decreases from the distributions peak, until about $5e^{10}$, where frequency stabilizes. \cref{fig:Rosenbrocks-Saddle-violin} shows the secondary distribution peak, or 'saddle', exists near the lower quartile. This function behavior causes existence of local minima and maximums, making this function a very good choice for testing how well convergence or optimization algorithms handle local minima and maximums. 
+Rosenbrock’s Saddle is useful for testing algorithms due to its curved valley and local minima structure \cite{rosenbrock1960}. Fitness values produced by Rosenbrock's Saddle demonstrate the aptness of the function name, with the distribution curve seen in \cref{fig:Rosenbrocks-Saddle-histogram} showing a clear saddle-like distribution shape. Frequency immediately begins to decrease as fitness decreases from the distributions peak, until about $5e^{10}$, where frequency stabilizes. \cref{fig:Rosenbrocks-Saddle-violin} shows the secondary distribution peak, or 'saddle', exists near the lower quartile. This function behavior causes existence of local minima and maximums, making this function a very good choice for testing how well convergence or optimization algorithms handle local minima and maximums. 
 
 \cref{fig:all-experiments-time} shows Rosenbrock's saddle as the second fastest function to execute, slightly trailing DeJong 1. This is likely due to the relative simplicity of the  Rosenbrock's Saddle equation. While not as straightforward as DeJong 1, Rosenbrock's Saddle is still free of trigonometry functions, square roots, and floating-point divisions. Every mathematical operation in this function can be programmed as addition or multiplication, allowing for rapid calculation, as these operations have significantly less overhead than something like $\cos{x}$ or  $\sqrt{x}$.
 
@@ -244,7 +270,7 @@ In addition to rapid execution, Rosenbrock's Saddle produces a wider range of fi
 
 \subsection{Schwefel}
 
-Fitness values observed from the Schwefel function appear to have fairly low kurtosis. \cref{fig:Schwefel-histogram} shows frequency quickly dropping as fitness values stray from the median. This drop off is especially noticeable on the lower end of fitness values. However, once sufficiently far from the median fitness value in either direction, frequency experiences a local maxima. The intensity of this maxima is greater on the higher end. While the frequency spike in the lower end is not as significant, it is notably further from the median than on the higher end.
+The Schwefel function has a complex nature, containing many local minima \cite{schwefel_sfu}. This makes it very useful in analyzing how well an optimization algorithm handles local minima when searching for the global minima. Fitness values observed from the Schwefel function appear to have fairly low kurtosis. \cref{fig:Schwefel-histogram} shows frequency quickly dropping as fitness values stray from the median. This drop off is especially noticeable on the lower end of fitness values. However, once sufficiently far from the median fitness value in either direction, frequency experiences a local maxima. The intensity of this maxima is greater on the higher end. While the frequency spike in the lower end is not as significant, it is notably further from the median than on the higher end.
 
 \cref{fig:Schwefel-violin} further demonstrates the unique distribution of fitness values observed in this function, showing that distribution drops of fairly steadily when fitness values are greater than the median, with a spike just outside of the upper quartile. As fitness value decreases, frequency drops rapidly. That is, however, until far outside the lower-quartile, where frequency spikes. The elongated tail seen in \cref{fig:Schwefel-violin} demonstrates the unusual nature of this lower-quartile behavior.
 
@@ -302,7 +328,9 @@ One notable characteristic of fitness values produced by the Sttretched V Sine W
     \label{fig:Stretched-V-Sine-Wave-violin}
 \end{figure}
 
-
+\newpage
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
 

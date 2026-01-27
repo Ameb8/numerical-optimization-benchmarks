@@ -8,7 +8,7 @@
       "lower_bound": -512.0,
       "problem_type": 1,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -17,7 +17,7 @@
       "lower_bound": -100.0,
       "problem_type": 2,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -26,7 +26,7 @@
       "lower_bound": -100.0,
       "problem_type": 3,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -35,7 +35,7 @@
       "lower_bound": -30.0,
       "problem_type": 4,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -44,7 +44,7 @@
       "lower_bound": -500.0,
       "problem_type": 5,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -53,7 +53,7 @@
       "lower_bound": -30.0,
       "problem_type": 6,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -62,7 +62,7 @@
       "lower_bound": -30.0,
       "problem_type": 7,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -71,7 +71,7 @@
       "lower_bound": -32.0,
       "problem_type": 8,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 10866,
       "population_size": 30
     },
     {
@@ -80,7 +80,7 @@
       "lower_bound": -32.0,
       "problem_type": 9,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     },
     {
@@ -89,7 +89,7 @@
       "lower_bound": -500.0,
       "problem_type": 10,
       "dimensions": 30,
-      "seed": 1,
+      "seed": 108664,
       "population_size": 30
     }
   ]
