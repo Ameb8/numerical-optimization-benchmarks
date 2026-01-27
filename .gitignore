@@ -1,10 +1,11 @@
 # Track empty results directory but keep 'empty'
 results/
 !results/.gitkeep
+!results/Example_Benchmark
 
 # Compiler files
-bin/
-build/
+**/bin/
+**/build/
 
 # Python files
 *.pyc
@@ -13,3 +14,6 @@ __pycache__/
 
 # IDE files
 .vscode/
+
+# Logs
+*.log*
