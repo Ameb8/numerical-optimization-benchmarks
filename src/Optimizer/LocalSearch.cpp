@@ -7,12 +7,12 @@ void LocalSearch::localSearch() {
     solutions.push_back(solutionBuilder.getRand());
 
     // Set initial solution as best
-    double minFitness = problem.evaluate(solutions.back());
+    bestFitnesses.push_back(problem.evaluate(solutions.back()));
     bestSolution = solutions.back();
 
     bool minimaFound = false;
 
-    while(minimaFound) {
+    while(!minimaFound) {
         // Add current best solution/fitness as next iteration's best
         solutions.push_back(solutions.back());
         bestFitnesses.push_back(bestFitnesses.back());

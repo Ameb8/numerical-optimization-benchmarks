@@ -17,8 +17,10 @@ double Blind::optimize() {
         bestFitnesses[i] = problem.evaluate(solutions[i]);
 
         // Update best fitness
-        if(i > 0 && bestFitnesses[i-1] > bestFitnesses[i])
+        if(i > 0 && bestFitnesses[i-1] > bestFitnesses[i]) {
             bestFitnesses[i] = bestFitnesses[i - 1];
+            solutions[i] = solutions[i - 1];
+        }
     }
 
     // Return execution time

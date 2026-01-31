@@ -10,12 +10,24 @@
 class Optimizer {
 public:
     Optimizer(SolutionBuilder solutionBuilder, Problem& problem, int maxIterations)
-        : solutionBuilder(solutionBuilder),
-          problem(problem)
+        : problem(problem),
+          solutionBuilder(solutionBuilder),
+          maxIterations(maxIterations)
     {}
 
     virtual ~Optimizer() = default; // Virtual destructor
     virtual double optimize() = 0; 
+
+    // Getters
+    double getBestFitness() const { return bestFitnesses.back(); }
+    const std::vector<double>& getBestSolution() const { return bestSolution; }
+    const std::vector<double>& getBestFitnesses() const { return bestFitnesses; }
+    const std::vector<std::vector<double>>& getSolutions() const { return solutions; }
+    int getMaxIterations() const { return maxIterations; }
+    const Problem& getProblem() const { return problem; }
+    const SolutionBuilder& getSolutionBuilder() const { return solutionBuilder; }
+
+
 protected:
     Problem& problem;
     SolutionBuilder solutionBuilder;

@@ -5,8 +5,8 @@
 
 class LocalSearch : public Optimizer {
 private:
-    double delta;
-    int numNeighbors;
+    const double delta;
+    const int numNeighbors;
 
     void localSearch();
 
