@@ -17,7 +17,7 @@ public:
     SolutionBuilder(int dimensions, int lower, int upper, int seed)
         : dimensions(dimensions),
           lower(lower),
-          upper(upper),
+          upper(upper)
     {
         mt.init_genrand(seed);
     }
@@ -27,7 +27,7 @@ public:
     std::vector<std::vector<double>> getNeighbors(
         const std::vector<double>& center,
         int numNeighbors,
-        double delta
+        double maxDelta
     );
 
     double getDimensions() { return dimensions; }

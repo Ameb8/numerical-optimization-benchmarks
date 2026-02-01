@@ -16,7 +16,7 @@ std::vector<double> SolutionBuilder::getRand() {
 std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
     const std::vector<double>& center,
     int numNeighbors,
-    int delta
+    double maxDelta
 ) {
     std::vector<std::vector<double>> solutions(dimensions, std::vector<double>());
 

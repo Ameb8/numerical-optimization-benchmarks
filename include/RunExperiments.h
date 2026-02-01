@@ -14,7 +14,7 @@ private:
     std::string outputFile;
 
     bool loadConfig(const std::string& inputFile);
-    bool runExperiment(ExperimentConfig& experiment);
+    //bool runExperiment(ExperimentConfig& experiment);
     std::vector<std::string> getNames(std::vector<ExperimentConfig> configs);
     bool writeResults(
         std::vector<double> bestSolution, 
