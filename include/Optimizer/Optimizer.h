@@ -19,13 +19,13 @@ public:
     virtual double optimize() = 0; 
 
     // Getters
-    double getBestFitness() const { return bestFitnesses.back(); }
-    const std::vector<double>& getBestSolution() const { return bestSolution; }
-    const std::vector<double>& getBestFitnesses() const { return bestFitnesses; }
-    const std::vector<std::vector<double>>& getSolutions() const { return solutions; }
-    int getMaxIterations() const { return maxIterations; }
-    const Problem& getProblem() const { return problem; }
-    const SolutionBuilder& getSolutionBuilder() const { return solutionBuilder; }
+    double getBestFitness() { return bestFitnesses.back(); }
+    std::vector<double>& getBestSolution() { return bestSolution; }
+    std::vector<double>& getBestFitnesses() { return bestFitnesses; }
+    std::vector<std::vector<double>>& getSolutions() { return solutions; }
+    int getMaxIterations() { return maxIterations; }
+    Problem& getProblem() { return problem; }
+    SolutionBuilder& getSolutionBuilder() { return solutionBuilder; }
 
 
 protected:
@@ -37,3 +37,4 @@ protected:
     std::vector<std::vector<double>> solutions;
 };
 
+#endif
