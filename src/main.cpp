@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string.h>
-#include "BenchmarkRunner.h"
+#include "RunExperiments.h"
 
 int main(int argc, char* argv[]) {
     if(argc < 3) { // Read program arguments
@@ -8,9 +8,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Run benchmark
-    BenchmarkRunner br;
-    br.runBenchmarks(argv[1], argv[2]);
+    RunExperiments runner(argv[1], argv[2]);
+    runner.runExperiments();
 
     return 0;
 }
