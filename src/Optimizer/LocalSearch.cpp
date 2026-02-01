@@ -30,7 +30,7 @@ void LocalSearch::localSearch() {
 
 
         // Check all neighbors
-        for(int i = 0; i < neighbors.size(); i++) {
+        for(size_t i = 0; i < neighbors.size(); i++) {
             double fitness = problem.evaluate(neighbors[i]);
 
             // Better fitness found, update stats

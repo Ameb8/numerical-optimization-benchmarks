@@ -121,7 +121,10 @@ void BenchmarkRunner::writeTimeCSV(const std::vector<Experiment>& experiments, c
 
 }
 
+
 void BenchmarkRunner::runBenchmarks(const std::string& inputFile, const std::string& benchmarkName) {
+    
+
     const std::string fitnessName = "fitness.csv";
     const std::string timeName = "time.csv";
 

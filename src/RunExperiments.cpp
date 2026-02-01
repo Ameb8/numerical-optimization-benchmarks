@@ -28,7 +28,7 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
     json j;
     file >> j;
 
-    if (!j.contains("experiments") || !j["experiments"].is_array()) {
+    if(!j.contains("experiments") || !j["experiments"].is_array()) {
         std::cerr << "JSON does not contain 'experiments' array.\n";
         return false;
     }
@@ -53,7 +53,7 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
             cfg.maxIterations = opt.value("iterations", 0);
             cfg.neighborDelta = opt.value("delta", 0.0);
             cfg.numNeighbors = opt.value("num_neighbors", 0);
-        } else {
+        } else { // No optimizer provided
             cfg.optimizer = "";
             cfg.maxIterations = 0;
             cfg.neighborDelta = 0.0;
@@ -68,7 +68,7 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
 
     return true;
 }
-
+/*
 bool RunExperiments::runExperiment(ExperimentConfig& config) {
     // Perform experiment setup
     std::unique_ptr<Problem> problem = ProblemFactory::create(config.problemType);
@@ -85,6 +85,7 @@ bool RunExperiments::runExperiment(ExperimentConfig& config) {
         optimizer->getSolutions()
     );
 }
+*/
 
 bool writeCSV(
     const std::string& filename,
