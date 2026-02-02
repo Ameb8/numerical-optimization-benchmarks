@@ -7,11 +7,11 @@
 
 #include <External/json.hpp>
 
-#include <ProblemFactory.h>
-#include <Problem/Problem.h>
-#include <SolutionBuilder.h>
-
+#include "ProblemFactory.h"
+#include "Problem/Problem.h"
+#include "SolutionBuilder.h"
 #include "Optimizer/OptimizerFactory.h"
+#include "debug.h"
 
 
 using json = nlohmann::json; // Alias JSON parsing library
@@ -19,8 +19,11 @@ using json = nlohmann::json; // Alias JSON parsing library
 
 
 bool RunExperiments::loadConfig(const std::string& inputFile) {
+    debug::log("\nConfig Loading from:\t", inputFile);
+
     std::ifstream file(inputFile);
-    if (!file) {
+    
+    if(!file) { // File failed to open
         std::cerr << "Cannot open input file: " << inputFile << "\n";
         return false;
     }
@@ -28,14 +31,15 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
     json j;
     file >> j;
 
+    // Ensure experiments exist
     if(!j.contains("experiments") || !j["experiments"].is_array()) {
         std::cerr << "JSON does not contain 'experiments' array.\n";
         return false;
     }
 
-    std::vector<ExperimentConfig> experiments;
+    std::vector<ExperimentConfig> experiments; // Stores experiment configs
 
-    for (const auto& item : j["experiments"]) {
+    for(const auto& item : j["experiments"]) {
         ExperimentConfig cfg;
 
         // Basic fields
@@ -50,7 +54,7 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
         if (item.contains("optimizer") && item["optimizer"].is_object()) {
             const auto& opt = item["optimizer"];
             cfg.optimizer = opt.value("type", "");
-            cfg.maxIterations = opt.value("iterations", 0);
+            cfg.maxIterations = opt.value("iterations", 1);
             cfg.neighborDelta = opt.value("delta", 0.0);
             cfg.numNeighbors = opt.value("num_neighbors", 0);
         } else { // No optimizer provided
@@ -61,6 +65,18 @@ bool RunExperiments::loadConfig(const std::string& inputFile) {
         }
 
         experiments.push_back(cfg);
+
+        debug::log(
+            "\n\nExperiment Config Created for ",
+            cfg.experimentName, "\t(", cfg.problemType, ")",
+            "\n Range: [", cfg.lower, ", ", cfg.upper, "]",
+            "\nDimensions: ", cfg.dimensions,
+            "\nSeed: ", cfg.seed,
+            "\nOptimizer: ", cfg.optimizer, 
+            "\nIterations: ", cfg.maxIterations,
+            "\nNeighbors/Max Delta: ", cfg.numNeighbors,
+            ", ", cfg.neighborDelta
+        );
     }
 
     // Store loaded configs as field
@@ -132,7 +148,7 @@ bool writeCSV(
 std::vector<std::string> RunExperiments::getNames(std::vector<ExperimentConfig> configs) {
     std::vector<std::string> names(configs.size());
 
-    for(int i = 0; i < configs.size(); i++) {
+    for(size_t i = 0; i < configs.size(); i++) {
         names[i] = configs[i].experimentName;
     }
 
@@ -149,6 +165,7 @@ int RunExperiments::runExperiments() {
     std::vector<std::vector<double>> fitnessResults(numExperiments);
 
     for(int i = 0; i < numExperiments; i++) {
+        debug::log("\nRunning Experiment:\t", configs[i].experimentName);
         ExperimentConfig config = configs[i];
 
         // Perform experiment setup
