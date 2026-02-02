@@ -9,7 +9,7 @@
 
 class Optimizer {
 public:
-    Optimizer(SolutionBuilder solutionBuilder, Problem& problem, int maxIterations)
+    Optimizer(SolutionBuilder& solutionBuilder, Problem& problem, int maxIterations)
         : problem(problem),
           solutionBuilder(solutionBuilder),
           maxIterations(maxIterations)
@@ -30,7 +30,7 @@ public:
 
 protected:
     Problem& problem;
-    SolutionBuilder solutionBuilder;
+    SolutionBuilder& solutionBuilder;
     int maxIterations;
     std::vector<double> bestSolution;
     std::vector<double> bestFitnesses;

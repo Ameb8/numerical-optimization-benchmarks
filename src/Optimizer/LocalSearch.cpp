@@ -37,6 +37,7 @@ void LocalSearch::localSearch() {
             if(fitness < bestFitnesses.back()) {
                 bestFitnesses.back() = fitness;
                 solutions.back() = neighbors[i];
+                minimaFound = false;
             }
 
         }

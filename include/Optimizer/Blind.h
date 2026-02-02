@@ -5,7 +5,7 @@
 
 class Blind : public Optimizer {
 public:
-    Blind(SolutionBuilder solutionBuilder, Problem& problem, int maxIterations)
+    Blind(SolutionBuilder& solutionBuilder, Problem& problem, int maxIterations)
         : Optimizer(solutionBuilder, problem, maxIterations)
     {
         bestFitnesses.resize(maxIterations);

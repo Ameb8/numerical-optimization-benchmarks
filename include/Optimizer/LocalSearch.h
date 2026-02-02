@@ -11,7 +11,7 @@ private:
     void localSearch();
 
 public:
-    LocalSearch(SolutionBuilder solutionBuilder, Problem& problem, int maxIterations, double delta, int numNeighbors)
+    LocalSearch(SolutionBuilder& solutionBuilder, Problem& problem, int maxIterations, double delta, int numNeighbors)
         : Optimizer(solutionBuilder, problem, maxIterations),
           delta(delta),
           numNeighbors(numNeighbors)
