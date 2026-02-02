@@ -1,14 +1,27 @@
-# Compiler and flags
+# Compiler
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude -O3
 
-# Project directories
-SRC_DIR = src
-BUILD_DIR = build
-BIN_DIR = bin
-INCLUDE_DIR = include
+# Compiler flags Flags
+CXXFLAGS_BASE    = -std=c++20 -Wall -Wextra -Iinclude
+CXXFLAGS_RELEASE = -O3 -DNDEBUG
+CXXFLAGS_DEBUG   = -O0 -g
 
-# Output executable
+# Mode (default = release)
+MODE ?= release
+
+# Directories
+SRC_DIR   = src
+BUILD_DIR = build/$(MODE)
+BIN_DIR   = bin/$(MODE)
+
+# Select flags
+ifeq ($(MODE),debug)
+    CXXFLAGS = $(CXXFLAGS_BASE) $(CXXFLAGS_DEBUG)
+else
+    CXXFLAGS = $(CXXFLAGS_BASE) $(CXXFLAGS_RELEASE)
+endif
+
+# Output executable path
 TARGET = $(BIN_DIR)/benchmark
 
 # Dynamically find source code files
@@ -20,19 +33,23 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(MODULE_SRCS))
 # Default target
 all: $(TARGET)
 
+# Debug shortcut
+debug:
+	$(MAKE) MODE=debug
+
 # Link command
 $(TARGET): $(OBJ_FILES)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Compile object files command
+# Compile object files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -rf build bin
 
-.PHONY: all clean
+.PHONY: all debug clean
 
