@@ -18,7 +18,7 @@ std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
     int numNeighbors,
     double maxDelta
 ) {
-    std::vector<std::vector<double>> solutions(dimensions, std::vector<double>());
+    std::vector<std::vector<double>> solutions(numNeighbors, std::vector<double>(dimensions));
 
     // Randomly generate neighbors within maxDelta for each dimension
     for(int i = 0; i < numNeighbors; i++) {
