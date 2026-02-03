@@ -1,48 +1,99 @@
 from pathlib import Path
+from typing import Union
 import pandas as pd
 import numpy as np
 
 
-def load_benchmark_data(result_dir: Path) -> pd.DataFrame:
-    fitness_file: Path = result_dir / 'fitness.csv'
-    time_file: Path = result_dir / 'time.csv'
+def load_benchmark_data(
+    fitness_csv: Union[str, Path],
+    time_csv: Union[str, Path],
+) -> pd.DataFrame:
+    """
+    Load experiment fitness trajectories and execution times, average results
+    across seeds, and return a single DataFrame.
 
-        # Check that files exist
-    if not fitness_file.exists():
-        raise FileNotFoundError(f"Missing fitness CSV: {fitness_file}")
-    if not time_file.exists():
-        raise FileNotFoundError(f"Missing time CSV: {time_file}")
+    Output columns:
+        experiment
+        fitness_curve_mean : np.ndarray
+        best_mean, best_std
+        final_mean, final_std
+        n_seeds
+        execution_time
+    """
 
-    fitness_df: pd.DataFrame = pd.read_csv(result_dir / 'fitness.csv')
-    time_df: pd.DataFrame = pd.read_csv(result_dir / 'time.csv')
+    # Load fitness curves (one array per seed)
+    rows: list[dict[str, object]] = []
 
-    # Check that CSVs are not empty
-    if fitness_df.empty:
-        raise ValueError(f"fitness.csv is empty: {fitness_file}")
-    if time_df.empty:
-        raise ValueError(f"time.csv is empty: {time_file}")
+    with open(fitness_csv, "r") as f:
+        for line in f:
+            parts = line.strip().split(",")
+            experiment_full = parts[0]
+            curve = np.asarray(parts[1:], dtype=float)
 
-    # Transpose fitness_df so experiments are rows
-    fitness_transposed = fitness_df.T
-    fitness_transposed.columns = [f"run_{i+1}" for i in range(fitness_transposed.shape[1])]
-    fitness_transposed.index.name = "experiment_name"
-    fitness_transposed.reset_index(inplace=True)
+            experiment = experiment_full.rsplit("_seed", 1)[0]
 
-    # Combine all run columns into a single numpy array column
-    fitness_transposed["fitness_values"] = fitness_transposed.iloc[:, 1:].apply(lambda row: row.to_numpy(dtype=np.float64), axis=1)
+            rows.append(
+                {
+                    "experiment": experiment,
+                    "fitness_curve": curve,
+                }
+            )
 
-    # Keep only experiment_name and fitness_values
-    fitness_transposed = fitness_transposed[["experiment_name", "fitness_values"]]
+    fitness_df = pd.DataFrame(rows)
 
-    # Merge Dataframes
-    processed_df = pd.merge(fitness_transposed, time_df, on="experiment_name")
+    # Calculate per-seed scalar statistics 
+    fitness_df["best"] = fitness_df["fitness_curve"].apply(np.min)
+    fitness_df["final"] = fitness_df["fitness_curve"].apply(lambda x: x[-1])
 
-    # Add summary statistics
-    processed_df["mean"] = processed_df["fitness_values"].apply(np.mean)
-    processed_df["std"] = processed_df["fitness_values"].apply(np.std)
-    processed_df["median"] = processed_df["fitness_values"].apply(np.median)
-    processed_df["min"] = processed_df["fitness_values"].apply(np.min)
-    processed_df["max"] = processed_df["fitness_values"].apply(np.max)
-    processed_df["range"] = processed_df["max"] - processed_df["min"]
+    # Curve averaging helper 
+    def mean_curve(curves: pd.Series) -> np.ndarray:
+        max_len = max(len(c) for c in curves)
 
-    return processed_df
+        padded = np.vstack(
+            [
+                np.pad(c, (0, max_len - len(c)), constant_values=np.nan)
+                for c in curves
+            ]
+        )
+
+        return np.nanmean(padded, axis=0)
+
+    # Aggregate per experiment 
+    fitness_agg = (
+        fitness_df
+        .groupby("experiment")
+        .agg(
+            fitness_curve_mean=("fitness_curve", mean_curve),
+            best_mean=("best", "mean"),
+            best_std=("best", "std"),
+            final_mean=("final", "mean"),
+            final_std=("final", "std"),
+            n_seeds=("fitness_curve", "count"),
+        )
+        .reset_index()
+    )
+
+    # Load execution times
+    time_df = pd.read_csv(time_csv)
+    time_df.columns = ["experiment_full", "execution_time"]
+
+    time_df["experiment"] = (
+        time_df["experiment_full"]
+        .str.replace(r"_seed\d+$", "", regex=True)
+    )
+
+    time_avg = (
+        time_df
+        .groupby("experiment", as_index=False)["execution_time"]
+        .mean()
+    )
+
+    # Merge dataframes 
+    result = pd.merge(
+        fitness_agg,
+        time_avg,
+        on="experiment",
+        how="left",
+    )
+
+    return result
