@@ -4,7 +4,7 @@ from pathlib import Path
 from .models import Benchmark
 
 PROJECT_ROOT: Path = Path.cwd()
-EXEC_PATH: Path = PROJECT_ROOT / 'bin' / 'benchmark'
+EXEC_PATH: Path = PROJECT_ROOT / 'bin' / 'release' / 'benchmark'
 RESULTS_ROOT: Path = PROJECT_ROOT / 'results'
 
 def compile_benchmark() -> bool:
@@ -12,7 +12,6 @@ def compile_benchmark() -> bool:
         result = subprocess.run(
             ['make'],
             cwd=PROJECT_ROOT,
-            capture_output=True,
             text=True,
             check=False
         )
@@ -34,15 +33,13 @@ def compile_benchmark() -> bool:
 
     return result.returncode == 0
 
-def exec_benchmark(benchmark: Benchmark) -> bool:
-    benchmark_path: Path = RESULTS_ROOT / benchmark.benchmark_name / 'benchmark.json'
-    exec_command: list[str] = ['./bin/benchmark', benchmark_path, benchmark.benchmark_name]
+def exec_benchmark(benchmark: Benchmark, config_path: Path, output_dir: Path) -> bool:
+    exec_command: list[str] = ['./bin/release/benchmark', str(config_path), str(output_dir)]
 
     try:
         result = subprocess.run(
             exec_command,
             cwd=PROJECT_ROOT,
-            capture_output=True,
             text=True,
             check=False,
         )
@@ -63,7 +60,7 @@ def exec_benchmark(benchmark: Benchmark) -> bool:
     
     return result.returncode == 0
 
-def run_benchmark(benchmark: Benchmark) -> bool:
+def run_benchmark(benchmark: Benchmark, config_path: Path, output_dir: Path) -> bool:
     if not compile_benchmark():
         return False
     
