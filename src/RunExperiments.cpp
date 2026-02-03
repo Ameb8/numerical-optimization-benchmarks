@@ -166,7 +166,7 @@ int RunExperiments::runExperiments() {
 
     for(int i = 0; i < numExperiments; i++) {
         debug::log("\nRunning Experiment:\t", configs[i].experimentName);
-        ExperimentConfig config = configs[i];
+        ExperimentConfig& config = configs[i];
 
         // Perform experiment setup
         std::unique_ptr<Problem> problem = ProblemFactory::create(config.problemType);
@@ -181,6 +181,11 @@ int RunExperiments::runExperiments() {
     std::vector<std::string> experimentNames = getNames(configs);
     std::string bestFitnessesPath = outputFile + "/" + std::string(bestFitnessesFile);
     std::string timesPath = outputFile + "/" + std::string(timesFile);
+    std::vector<std::vector<double>> timeWriteCSV(runtimes.size());
+
+    // Convert runtimes to csv-friendly format
+    for(size_t i = 0; i < runtimes.size(); i++)
+        timeWriteCSV[i] = { runtimes[i] };
 
     // Write fitness data to csv
     writeCSV(
@@ -190,9 +195,12 @@ int RunExperiments::runExperiments() {
     );
 
     // Write time data to csv
-    //writeCSV(
-
-    //)
+    writeCSV(
+        timesPath,
+        timeWriteCSV,
+        experimentNames,
+        std::vector<std::string>(1, "Execution Time")
+    );
 
     return numExperiments;
 }
