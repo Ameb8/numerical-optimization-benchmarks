@@ -12,6 +12,8 @@ private:
     const int lower;
     const int upper;
     MersenneTwister mt;
+
+    double checkBounds(double value);
 public:
     // Constructors
     SolutionBuilder(int dimensions, int lower, int upper, int seed)

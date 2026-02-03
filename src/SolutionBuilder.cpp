@@ -13,6 +13,15 @@ std::vector<double> SolutionBuilder::getRand() {
     return solution;
 }
 
+double SolutionBuilder::checkBounds(double value) {
+    if(value > upper)
+        value = upper;
+    else if(value < lower)
+        value = lower;
+
+    return value;
+}
+
 std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
     const std::vector<double>& center,
     int numNeighbors,
@@ -25,7 +34,7 @@ std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
         for(int j = 0; j < dimensions; j++) {
             // Increment randomly within maxDelta range
             double delta = (2.0 * mt.genrand_real1() - 1) * maxDelta;
-            solutions[i][j] = center[j] + delta;
+            solutions[i][j] = checkBounds(center[j] + delta);
         }
     }
 
