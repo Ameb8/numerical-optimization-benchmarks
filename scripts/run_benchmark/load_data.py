@@ -1,12 +1,63 @@
-from pathlib import Path
-from typing import Union
 import pandas as pd
 import numpy as np
+
+from pathlib import Path
+import json
+from typing import Union
+
+
+def load_experiment_metadata(json_path: Union[str, Path]) -> pd.DataFrame:
+    """
+    Load experiment metadata from a JSON file and return a DataFrame with
+    columns: experiment, dimensions, problem_type, optimizer_type
+    """
+    with open(json_path, "r") as f:
+        data = json.load(f)
+
+    rows = []
+    for exp in data["experiments"]:
+        experiment_full = exp["experiment_name"]
+        experiment = experiment_full.rsplit("_seed", 1)[0]  # remove seed
+        rows.append({
+            "experiment": experiment,
+            "dimensions": exp.get("dimensions"),
+            "problem_type": exp.get("problem_type"),
+            "optimizer_type": exp.get("optimizer", {}).get("type")
+        })
+
+    return pd.DataFrame(rows).drop_duplicates(subset="experiment")  # one row per experiment
+
+
+def resample_curve(
+    curve: np.ndarray,
+    target_iters: int = 30,
+) -> np.ndarray:
+    if len(curve) == target_iters + 1:
+        return curve
+
+    old_x = np.linspace(0, target_iters, num=len(curve))
+    new_x = np.linspace(0, target_iters, num=target_iters + 1)
+
+    return np.interp(new_x, old_x, curve)
+
+
+def add_normalized_curves(
+    df: pd.DataFrame,
+    target_iters: int = 30,
+) -> pd.DataFrame:
+    df = df.copy()
+
+    df["fitness_curve_norm"] = df["fitness_curve_mean"].apply(
+        lambda c: resample_curve(c, target_iters)
+    )
+
+    return df
 
 
 def load_benchmark_data(
     fitness_csv: Union[str, Path],
     time_csv: Union[str, Path],
+    metadata_json: Union[str, Path],
 ) -> pd.DataFrame:
     """
     Load experiment fitness trajectories and execution times, average results
@@ -95,5 +146,12 @@ def load_benchmark_data(
         on="experiment",
         how="left",
     )
+
+    # Merge experiment metadata
+    metadata_df = load_experiment_metadata(metadata_json)
+    result = pd.merge(result, metadata_df, on="experiment", how="left")
+
+    # Add normalized fitness curve
+    result = add_normalized_curves(result, 30)
 
     return result
