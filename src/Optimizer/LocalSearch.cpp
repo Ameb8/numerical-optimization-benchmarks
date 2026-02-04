@@ -4,48 +4,50 @@
 
 void LocalSearch::localSearch() {
     // Get initial population pseudo-randomly
-    solutions.push_back(solutionBuilder.getRand());
-
-    // Set initial solution as best
-    bestFitnesses.push_back(problem.evaluate(solutions.back()));
-    bestSolution = solutions.back();
-
+    std::vector<double> curSolution = solutionBuilder.getRand();
+    double curFitness = problem.evaluate(curSolution);
     bool minimaFound = false;
 
+    // Loop until local minima found
     while(!minimaFound) {
-        // Add current best solution/fitness as next iteration's best
-        solutions.push_back(solutions.back());
-        bestFitnesses.push_back(bestFitnesses.back());
-
         minimaFound = true;
-
 
         // Get set of neighbors
         std::vector<std::vector<double>> neighbors = solutionBuilder.getNeighbors(
-            solutions.back(),
+            curSolution,
             numNeighbors,
             delta
         );
 
-
+        // Track local minima
+        int bestNeighborIdx = -1;
+        double bestNeighborFitness = std::numeric_limits<double>::max();
 
         // Check all neighbors
         for(size_t i = 0; i < neighbors.size(); i++) {
-            double fitness = problem.evaluate(neighbors[i]);
+            // Evaluate neighbor's fitness
+            double neighborFitness = problem.evaluate(neighbors[i]);
 
-            // Better fitness found, update stats
-            if(fitness < bestFitnesses.back()) {
-                bestFitnesses.back() = fitness;
-                solutions.back() = neighbors[i];
-                minimaFound = false;
+            // Better neighbor found, update stats
+            if(neighborFitness < bestNeighborFitness) {
+                bestNeighborIdx = i;
+                bestNeighborFitness = neighborFitness;
             }
+        }   
 
-        }
-        
+        // Compare best neighbor to center fitness
+        if(bestNeighborFitness < curFitness) {
+            minimaFound = false;
+            curSolution = neighbors[bestNeighborIdx];
+            curFitness = bestNeighborFitness;
+        } 
+
+        // Append best found fitness to results
+        if(!bestFitnesses.size() || bestFitnesses.back() > curFitness)
+            bestFitnesses.push_back(curFitness); // New best found
+        else // No new best found
+            bestFitnesses.push_back(bestFitnesses.back());
     }
-
-
-  
 }
 
 
