@@ -6,18 +6,7 @@ import seaborn as sns
 from pathlib import Path
 
 from typing import Optional, Sequence
-'''
-def build_histogram(
-    values: Sequence[float],
-    save_dir: Path,
-    filename: str,
-    title: str,
-    xlabel: str,
-    color: str = 'lightgreen',
-    bins: int = 10,
-    figsize: tuple[int, int] = (6, 5),
-) -> None:
-'''
+
 
 def build_histogram(
     values: Sequence[float],
@@ -177,6 +166,55 @@ def build_violin_plot(
 
     ax.set_ylabel(ylabel, fontsize=14)
     ax.set_title(title, fontsize=16, weight="bold")
+
+    sns.despine(trim=True)
+    fig.savefig(save_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
+
+def build_line_plot(
+    x: Sequence[float],
+    ys: Sequence[Sequence[float]],
+    labels: Sequence[str],
+    save_dir: Path,
+    filename: str,
+    title: str,
+    xlabel: str,
+    ylabel: str,
+    figsize: tuple[int, int] = (8, 6),
+    linewidth: float = 2.5,
+    markers: bool = False,
+    log_y: bool = False,
+) -> None:
+    if len(ys) != len(labels):
+        raise ValueError("ys and labels must have the same length")
+
+    save_dir.mkdir(parents=True, exist_ok=True)
+    save_path = save_dir / filename
+
+    sns.set_theme(style="whitegrid", palette="pastel")
+    sns.set_context("talk")
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    for y, label in zip(ys, labels):
+        sns.lineplot(
+            x=x,
+            y=y,
+            ax=ax,
+            label=label,
+            linewidth=linewidth,
+            marker="o" if markers else None,
+        )
+
+    ax.set_xlabel(xlabel, fontsize=14)
+    ax.set_ylabel(ylabel, fontsize=14)
+    ax.set_title(title, fontsize=16, weight="bold")
+    ax.legend()
+
+    if log_y:
+        ax.set_yscale("log")
 
     sns.despine(trim=True)
     fig.savefig(save_path, dpi=300, bbox_inches="tight")
