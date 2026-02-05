@@ -1,3 +1,20 @@
+/**
+ * @file main.cpp
+ * @author Alex Buckley
+ * @ingroup Core
+ * @brief Entry point for the Numerical Optimization Benchmarks CLI.
+ * * This file handles the command-line interface, initializes the debugging 
+ * environment, and hands off execution to the RunExperiments controller.
+ * * @section usage_sec Usage
+ * @code
+ * ./optimization_benchmarks <config_path> <output_path>
+ * @endcode
+ * * @param argc Argument count.
+ * @param argv Argument vector. Expects [1] config path and [2] output path.
+ * @return int Status code (0 for success, 1 for error).
+ */
+
+
 #include <iostream>
 #include <string.h>
 
