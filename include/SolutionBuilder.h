@@ -1,3 +1,11 @@
+/**
+ * @file SolutionBuilder.h
+ * @ingroup Utilities
+ * @brief Utility class for generating and manipulating candidate solutions.
+ * @author Alex Buckley
+ */
+
+
 #ifndef SOLUTION_BUILDER_H
 #define SOLUTION_BUILDER_H
 
@@ -6,16 +14,36 @@
 #include "Problem/Problem.h"
 #include "External/mt.h"
 
+
+/**
+ * @class SolutionBuilder
+ * @brief Responsible for creating random solutions and neighborhood samples.
+ *
+ * This class encapsulates the logic for generating initial random positions 
+ * within the search space and perturbing existing solutions to find neighbors.
+ * It utilizes the Mersenne Twister algorithm for high-quality random number generation.
+ */
 class SolutionBuilder { 
 private:
-    const int dimensions;
-    const int lower;
-    const int upper;
-    MersenneTwister mt;
+    const int dimensions;   ///< Dimensionality of the problem space
+    const int lower;        ///< Lower boundary for coordinate values
+    const int upper;        ///< Upper boundary for coordinate values
+    MersenneTwister mt;     ///< Random number generator instance
 
+    /**
+     * @brief Ensures a coordinate stays within the defined [lower, upper] bounds.
+     * @param value The value to check.
+     * @return The clamped value.
+     */
     double checkBounds(double value);
 public:
-    // Constructors
+    /**
+     * @brief Constructs a SolutionBuilder with specific space constraints.
+     * @param dimensions Number of variables in the solution vector.
+     * @param lower Minimum value for any given dimension.
+     * @param upper Maximum value for any given dimension.
+     * @param seed Value used to initialize the Mersenne Twister generator.
+     */
     SolutionBuilder(int dimensions, int lower, int upper, int seed)
         : dimensions(dimensions),
           lower(lower),
@@ -24,14 +52,30 @@ public:
         mt.init_genrand(seed);
     }
 
+    /**
+     * @brief Generates a single random solution vector within bounds.
+     * @return A vector of size @ref dimensions with values in range [lower, upper].
+     */
     std::vector<double> getRand();
 
+    /**
+     * @brief Generates a set of neighboring solutions around a central point.
+     *
+     * Used primarily by Local Search algorithms to explore the immediate vicinity 
+     * of the current best candidate.
+     *
+     * @param center The original solution vector to perturb.
+     * @param numNeighbors Number of neighbor vectors to generate.
+     * @param maxDelta The maximum step size allowed for perturbation in any dimension.
+     * @return A collection of neighboring solution vectors.
+     */
     std::vector<std::vector<double>> getNeighbors(
         const std::vector<double>& center,
         int numNeighbors,
         double maxDelta
     );
 
+    /** @brief Returns the dimensionality of the solution space. */
     double getDimensions() { return dimensions; }
 };
 
