@@ -176,6 +176,9 @@ int RunExperiments::runExperiments() {
         // Perform experiment
         runtimes[i] = optimizer->optimize();
         fitnessResults[i] = optimizer->getBestFitnesses();
+
+        // Display best found fitness and runtime for experiment
+        std::cout << "\nFitness of " << optimizer->getBestFitness() << " found for experiment " << config.experimentName << " in " << runtimes[i] << " seconds."; 
     }
 
     std::vector<std::string> experimentNames = getNames(configs);
