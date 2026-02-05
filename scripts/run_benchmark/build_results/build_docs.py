@@ -110,3 +110,85 @@ def build_latex_report(
 
         # End document
         f.write("\n\\end{document}\n")
+
+
+
+def build_latex_main(result_dir: Path) -> None:
+    tex_dir = result_dir / "docs"
+    fig_dir = tex_dir / "figures"
+    tab_dir = tex_dir / "tables"
+
+    figure_files = sorted(
+        p for p in fig_dir.glob("*.tex") if p.name != "main.tex"
+    )
+
+    table_files = sorted(tab_dir.glob("*.tex"))
+
+    main_tex = tex_dir / "main.tex"
+
+    lines = []
+
+    # Preamble
+    lines += [
+        r"\documentclass{article}",
+        r"\usepackage{graphicx}",
+        r"\usepackage{booktabs}",
+        r"\usepackage{placeins}",
+        r"\usepackage{caption}",
+        "",
+        r"\begin{document}",
+        "",
+        r"\section{Results}",
+        "",
+    ]
+
+    # Figures
+    if figure_files:
+        lines += [
+            r"\subsection{Figures}",
+            "",
+        ]
+        for fig in figure_files:
+            rel = fig.relative_to(tex_dir).as_posix()
+            lines.append(rf"\input{{{rel}}}")
+        lines += ["", r"\FloatBarrier", ""]
+
+    # Tables
+    if table_files:
+        lines += [
+            r"\subsection{Tables}",
+            "",
+        ]
+        for tab in table_files:
+            rel = tab.relative_to(tex_dir).as_posix()
+            lines.append(rf"\input{{{rel}}}")
+        lines += ["", r"\FloatBarrier", ""]
+
+    # End
+    lines += [
+        r"\end{document}",
+        "",
+    ]
+
+    main_tex.write_text("\n".join(lines))
+
+
+
+def write_latex_figure(
+    tex_path: Path,
+    image_path: Path,
+    caption: str,
+    label: str,
+    width: str = "0.85\\linewidth",
+) -> None:
+    tex = rf"""
+\begin{{figure}}[htbp]
+    \centering
+    \includegraphics[width={width}]{{{image_path.as_posix()}}}
+    \caption{{{caption}}}
+    \label{{{label}}}
+\end{{figure}}
+""".lstrip()
+
+    tex_path.parent.mkdir(parents=True, exist_ok=True)
+    tex_path.write_text(tex)

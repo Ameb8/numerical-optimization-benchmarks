@@ -64,11 +64,87 @@ def plot_fitness_violins(df: pd.DataFrame, plot_dir: Path) -> None:
         )
 
 
+def resample_to_x(y, x):
+    y = np.asarray(y)
+    old_x = np.linspace(0, 1, len(y))
+    new_x = np.linspace(0, 1, len(x))
+    return np.interp(new_x, old_x, y)
 
-def build_result(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
-    plots_dir = result_dir / 'plots'
+
+def plot_fitness_curves(
+    df: pd.DataFrame,
+    plot_dir: Path,
+    tex_dir: Path,
+) -> None:
+    # Group experiments by problem type and dimension
+    grouped = df.groupby(["problem_type", "dimensions"])
+
+    for (problem_type, dimensions), group in grouped:
+        blind = group[group["optimizer_type"] == "blind"]
+        repeated = group[group["optimizer_type"] == "repeated local"]
+
+        if blind.empty or repeated.empty:
+            continue
+        
+        blind = blind.iloc[0]
+        repeated = repeated.iloc[0]
+
+        x = np.arange(len(blind["fitness_curve_mean"]))
+
+        filename = f"problem_{problem_type}_dim{dimensions}_convergence"
+        image_path = plot_dir / f"{filename}.png"
+
+
+        # Build plot
+        plot_builder.build_line_plot(
+            x,
+            [
+                blind["fitness_curve_mean"],
+                resample_to_x(repeated["fitness_curve_mean"], x)
+            ],
+            [
+                "Blind Search",
+                "Repeated Local Search",
+            ],
+            plot_dir,
+            filename,
+            f'Problem {blind["problem_type"]} {blind["dimensions"]}-Dimensioned Convergence Speed',
+            "Iterations",
+            "Best Fitness Found",
+        )
+
+        caption = (
+            f"Problem {problem_type} ({dimensions} dimensions): "
+            "convergence speed comparison between Blind Search and "
+            "Repeated Local Search."
+        )
+
+        # Create label
+        label = f"fig:{filename}"
+
+        # Create LaTeX figure
+        build_docs.write_latex_figure(
+            tex_path=tex_dir / f"{filename}.tex",
+            image_path=image_path.relative_to(tex_dir.parent),
+            caption=caption,
+            label=label,
+        )
+
+
+
+
+
+def build_result(df: pd.DataFrame, result_dir: Path):
+    # DEfine and create output directories
+    tex_dir = result_dir / 'docs'
+    fig_dir = tex_dir / 'figures'
+    plots_dir = fig_dir / 'plots'
     plots_dir.mkdir(parents=True, exist_ok=True)
-    
+    tab_dir = tex_dir / 'tables'
+    tab_dir.mkdir(parents=True, exist_ok=True)
+
+
+    '''
     # Fitness plots
     plot_fitness_histograms(df, plots_dir)
     plot_all_fitness_histogram(df, plots_dir)
@@ -79,6 +155,11 @@ def build_result(df: pd.DataFrame, benchmark: Benchmark, result_dir: Path):
 
     # Create document
     build_docs.build_latex_report(df, result_dir)
+    '''
+
+    plot_fitness_curves(df, plots_dir, fig_dir)
+
+    build_docs.build_latex_main(result_dir)
 
     # Inform user of pots/document creation
     print(f'\nPlots and LaTeX document written to {plots_dir} and {result_dir / "docs"}')
