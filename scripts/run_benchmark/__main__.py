@@ -7,7 +7,7 @@ import sys
 
 from .load_data import load_benchmark_data
 from .models import Benchmark, Experiment
-from .run_experiments import compile_benchmark, exec_benchmark
+from .run_experiments import run_benchmark
 from .build_results import build_result
 
 
@@ -134,12 +134,12 @@ def main():
     print(f'\nFinal experiment configuration for {benchmark.benchmark_name} written to {benchmark_path}')
 
     # Compile benchmark program
-    if not compile_benchmark():
-        sys.exit(1)
+    #if not compile_benchmark():
+    #    sys.exit(1)
 
     # Execute benchmark program
-    if not exec_benchmark(benchmark, benchmark_path, benchmark_dir):
-        sys.exit(1)
+    run_benchmark(benchmark_path, benchmark_dir):
+    
 
     print( # Display paths to benchmark results
         f"Raw fitness and execution time values written to "
