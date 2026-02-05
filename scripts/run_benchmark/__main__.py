@@ -16,9 +16,8 @@ def parse_args() -> argparse.Namespace:
         description="Standard Benchmark Function Optimizer Experiments"
     )
 
-    group = parser.add_mutually_exclusive_group()
-
-    group.add_argument(
+    # Positional argument for experiment config file (defaults to cwd/config.toml)
+    parser.add_argument(
         "config",
         nargs="?",
         type=Path,
@@ -26,6 +25,8 @@ def parse_args() -> argparse.Namespace:
         help="Path to experiment configuration file (relative to CWD)"
     )
 
+    # Argument to prevent running of experiment, only produce analysis of already-existent results
+    group = parser.add_mutually_exclusive_group()
     group.add_argument(
         "-a", "--analyze",
         type=Path,
@@ -33,11 +34,20 @@ def parse_args() -> argparse.Namespace:
         help="Analyze pre-existing data at PATH (do not run experiment)"
     )
 
+
+    # Determine path to output directory for metadata, raw results, figures, and plots
     parser.add_argument(
         "-o", "--output",
         type=Path,
         default=Path("results"),
         help="Output directory (relative to CWD)"
+    )
+
+    # Do not produce plots/documents, only raw data and full experiment configuration file
+    parser.add_argument(
+        "--run-only",
+        action="store_true",
+        help="Run experiments up to raw data generation (do not build plots)"
     )
 
     return parser.parse_args()
@@ -133,18 +143,18 @@ def main():
     # Display path to validated experiment config
     print(f'\nFinal experiment configuration for {benchmark.benchmark_name} written to {benchmark_path}')
 
-    # Compile benchmark program
-    #if not compile_benchmark():
-    #    sys.exit(1)
-
     # Execute benchmark program
-    run_benchmark(benchmark_path, benchmark_dir):
+    run_benchmark(benchmark_path, benchmark_dir)
     
 
     print( # Display paths to benchmark results
         f"Raw fitness and execution time values written to "
         f"{benchmark_dir / 'best_fitness.csv'} and {benchmark_dir / 'times.csv'}"
     )
+
+    if args.run_only:
+        print("Run-only mode enabled; skipping plot generation.")
+        sys.exit(0)
 
     # Load results into dataframe
     data: pd.DataFrame = load_result_data(benchmark_dir)
