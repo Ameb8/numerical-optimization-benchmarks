@@ -1,3 +1,10 @@
+/**
+ * @file DeJong.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the DeJong 1 function.
+ */
+
 #ifndef DEJONG_H
 #define DEJONG_H
 
@@ -5,7 +12,10 @@
 #include <vector>
 
 
-
+/**
+ * @class DeJong
+ * @brief Implements the DeJong 1 benchmark function.
+ */
 class DeJongOne : public Problem {
 private:
     static constexpr double LOWER = -100.0;

@@ -1,3 +1,11 @@
+/**
+ * @file EggHolder.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Egg Holder function.
+ */
+
+
 #ifndef EGG_HOLDER_H
 #define EGG_HOLDER_H
 
@@ -5,6 +13,11 @@
 #include <vector>
 #include <cmath>
 
+
+/**
+ * @class EggHolder
+ * @brief Implements the Egg Holder benchmark function.
+ */
 class EggHolder : public Problem {
 private:
     static constexpr double LOWER = -500.0;

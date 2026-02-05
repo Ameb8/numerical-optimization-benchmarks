@@ -1,3 +1,11 @@
+/**
+ * @file StretchedV.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Stretched V function.
+ */
+
+
 #ifndef STRETCHED_V_H
 #define STRETCHED_V_H
 
@@ -5,6 +13,11 @@
 #include <vector>
 #include <cmath>
 
+
+/**
+ * @class StretchedV
+ * @brief Implements the StretchedV benchmark function.
+ */
 class StretchedV : public Problem {
 private:
     static constexpr double LOWER = -30.0;

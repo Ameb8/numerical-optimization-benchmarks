@@ -1,9 +1,22 @@
+/**
+ * @file Rosenbrock.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Rosenbrock function.
+ */
+
+
 #ifndef ROSENBROCK_H
 #define ROSENBROCK_H
 
 #include "Problem/Problem.h"
 #include <vector>
 
+
+/**
+ * @class Rosenbrock
+ * @brief Implements the Rosenbrock benchmark function.
+ */
 class Rosenbrock : public Problem {
 private:
     static constexpr double LOWER = -100.0;

@@ -1,3 +1,10 @@
+/**
+ * @file Griewangk.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Griewangk function.
+ */
+
 #ifndef GRIEWANGK_H
 #define GRIEWANGK_H
 
@@ -5,6 +12,11 @@
 #include <vector>
 #include <cmath>
 
+
+/**
+ * @class Griewangk
+ * @brief Implements the Griewangk benchmark function.
+ */
 class Griewangk : public Problem {
 private:
     static constexpr double LOWER = -500.0;

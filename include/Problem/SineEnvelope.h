@@ -1,3 +1,11 @@
+/**
+ * @file SineEnvelope.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Sine Envelope function.
+ */
+
+
 #ifndef SINE_ENVELOPE_H
 #define SINE_ENVELOPE_H
 
@@ -5,6 +13,11 @@
 #include <vector>
 #include <cmath>
 
+
+/**
+ * @class SineEnvelope
+ * @brief Implements the Sine Envelope benchmark function.
+ */
 class SineEnvelope : public Problem {
 private:
     static constexpr double LOWER = -30.0;

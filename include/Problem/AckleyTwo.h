@@ -1,3 +1,11 @@
+/**
+ * @file AckleyTwo.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Ackley 2 function.
+ */
+
+
 #ifndef ACKLEY_TWO_H
 #define ACKLEY_TWO_H
 
@@ -6,6 +14,11 @@
 #include <cmath>
 #include <numbers>
 
+
+/**
+ * @class AckleyTwo
+ * @brief Implements the Ackley 2 benchmark function.
+ */
 class AckleyTwo : public Problem {
 private:
     static constexpr double LOWER = -32.0;

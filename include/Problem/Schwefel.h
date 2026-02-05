@@ -1,9 +1,22 @@
+/**
+ * @file Schwefel.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Schwefel function.
+ */
+
+
 #ifndef SCHWEFEL_H
 #define SCHWEFEL_H
 
 #include "Problem/Problem.h"
 #include <vector>
 
+
+/**
+ * @class Schwefel
+ * @brief Implements the Schwefel benchmark function.
+ */
 class Schwefel : public Problem {
 private:
     static constexpr double LOWER = -512.0;

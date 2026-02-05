@@ -1,3 +1,11 @@
+/**
+ * @file Rastrigin.h
+ * @author Alex Buckley
+ * @ingroup Benchmarks
+ * @brief Implementation of the Ratrigin function.
+ */
+
+
 #ifndef RASTRIGIN_H
 #define RASTRIGIN_H
 
@@ -6,6 +14,11 @@
 #include <cmath>
 #include <numbers>
 
+
+/**
+ * @class Rastrigin
+ * @brief Implements the Rastrigin benchmark function.
+ */
 class Rastrigin : public Problem {
 private:
     static constexpr double LOWER = -30.0;
