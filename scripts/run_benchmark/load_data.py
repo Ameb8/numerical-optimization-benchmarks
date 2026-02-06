@@ -118,7 +118,10 @@ def load_benchmark_data(
         .agg(
             fitness_curve_mean=("fitness_curve", mean_curve),
             best_mean=("best", "mean"),
+            best_median=("best", "median"),
             best_std=("best", "std"),
+            best_min=("best", "min"), 
+            best_max=("best", "max"),
             final_mean=("final", "mean"),
             final_std=("final", "std"),
             n_seeds=("fitness_curve", "count"),
