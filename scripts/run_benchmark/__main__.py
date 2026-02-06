@@ -63,12 +63,10 @@ def load_config(config_file: Path) -> Benchmark:
         benchmark: Benchmark = Benchmark.from_toml(config_file)
 
     except tomllib.TOMLDecodeError as e:
-        print(f"Error: Failed to parse Config file {config_file}:\n{e}")
-        sys.exit(1)
+        sys.exit(f"Error: Failed to parse Config file {config_file}:\n{e}")
 
     except Exception as e:
-        print(f"Unexpected error loading benchmark config: {e}")
-        sys.exit(1)
+        sys.exit(f"Unexpected error loading benchmark config: {e}")
 
     print(f'\n\nSuccessfully loaded {len(benchmark.experiments)} experiments from {config_file}  \n')
     return benchmark
@@ -82,13 +80,11 @@ def load_result_data(benchmark_dir: Path) -> pd.DataFrame:
             benchmark_dir / "benchmark.json"
         )
 
-        print(f'\n\nData Loaded:\n\n{data.info()}\n\n{data.describe()}')
     except (FileNotFoundError, pd.errors.ParserError, ValueError) as e:
-        print(f"Error loading benchmark data: {e}")
-        sys.exit(1)
+        sys.exit(f"Error loading benchmark data: {e}")
     except Exception as e:
-        print(f"Unexpected error loading benchmark data: {e}")
-        sys.exit(1)
+        sys.exit(f"Unexpected error loading benchmark data: {e}")
+    
 
     return data
 
@@ -148,7 +144,7 @@ def main():
     
 
     print( # Display paths to benchmark results
-        f"Raw fitness and execution time values written to "
+        f"\nRaw fitness and execution time values written to "
         f"{benchmark_dir / 'best_fitness.csv'} and {benchmark_dir / 'times.csv'}"
     )
 
