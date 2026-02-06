@@ -5,6 +5,8 @@ from pathlib import Path
 import json
 from typing import Union
 
+from .problems import ProblemType
+
 
 def load_experiment_metadata(json_path: Union[str, Path]) -> pd.DataFrame:
     """
@@ -150,6 +152,11 @@ def load_benchmark_data(
     # Merge experiment metadata
     metadata_df = load_experiment_metadata(metadata_json)
     result = pd.merge(result, metadata_df, on="experiment", how="left")
+
+    # Add problem name column
+    result["problem_name"] = result["problem_type"].map(
+        lambda v: ProblemType(v).label if pd.notna(v) else None
+    )
 
     # Add normalized fitness curve
     result = add_normalized_curves(result, 30)

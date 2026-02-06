@@ -8,6 +8,64 @@ from ..models import Benchmark, Experiment
 from . import plot_builder, build_docs
 
 
+from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def plot_execution_times(df: pd.DataFrame, plot_dir: Path, tex_dir: Path) -> None:
+    plot_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Make the plots for each dimension
+    for dim in sorted(df['dimensions'].unique()):
+        # Get dimension vlue
+        df_dim = df[df['dimensions'] == dim]
+        
+        # Create plot
+        plt.figure(figsize=(12, 6))
+        sns.barplot(
+            data=df_dim,
+            x='problem_name',
+            y='execution_time',
+            hue='optimizer_type',
+            palette='Set2'
+        )
+        
+        # Label plot
+        plt.title(f'Execution Time for {dim} Dimensions')
+        plt.xlabel('Problem Name')
+        plt.ylabel('Execution Time (s)')
+        plt.legend(title='Optimizer')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        
+        # define path name
+        filename = f'execution_time_{dim}d'
+        save_path = plot_dir / filename
+
+        # Save plot
+        plt.savefig(f'{save_path}.png')
+        plt.close()
+
+        caption = (
+            f"Execution time for {dim}-dimensions: "
+            "Execution speed comparison between Blind Search and "
+            "Repeated Local Search across different functions."
+        )
+
+        # Create label
+        label = f"fig:{filename}"
+
+        # Create LaTeX figure
+        build_docs.write_latex_figure(
+            tex_path=tex_dir / f'{filename}.tex',
+            image_path=save_path.relative_to(tex_dir.parent),
+            caption=caption,
+            label=label,
+        )
+
+
+
 def plot_fitness_histograms(df: pd.DataFrame, plot_dir: Path, bins: int = 10) -> None:
     for _, row in df.iterrows():
         plot_builder.build_histogram(
@@ -77,9 +135,9 @@ def plot_fitness_curves(
     tex_dir: Path,
 ) -> None:
     # Group experiments by problem type and dimension
-    grouped = df.groupby(["problem_type", "dimensions"])
+    grouped = df.groupby(["problem_name", "dimensions"])
 
-    for (problem_type, dimensions), group in grouped:
+    for (problem_name, dimensions), group in grouped:
         blind = group[group["optimizer_type"] == "blind"]
         repeated = group[group["optimizer_type"] == "repeated local"]
 
@@ -91,7 +149,7 @@ def plot_fitness_curves(
 
         x = np.arange(len(blind["fitness_curve_mean"]))
 
-        filename = f"problem_{problem_type}_dim{dimensions}_convergence"
+        filename = f"{problem_name}_dim{dimensions}_convergence"
         image_path = plot_dir / f"{filename}.png"
 
 
@@ -108,15 +166,15 @@ def plot_fitness_curves(
             ],
             plot_dir,
             filename,
-            f'Problem {blind["problem_type"]} {blind["dimensions"]}-Dimensioned Convergence Speed',
+            f'{blind["problem_name"]} {blind["dimensions"]}-Dimensioned Convergence Speed',
             "Iterations",
             "Best Fitness Found",
         )
 
         caption = (
-            f"Problem {problem_type} ({dimensions} dimensions): "
+            f"{problem_name} "
             "convergence speed comparison between Blind Search and "
-            "Repeated Local Search."
+            f"Repeated Local Search with {dimensions}-Dimensions."
         )
 
         # Create label
@@ -135,7 +193,7 @@ def plot_fitness_curves(
 
 
 def build_result(df: pd.DataFrame, result_dir: Path):
-    # DEfine and create output directories
+    # Define and create output directories
     tex_dir = result_dir / 'docs'
     fig_dir = tex_dir / 'figures'
     plots_dir = fig_dir / 'plots'
@@ -143,22 +201,11 @@ def build_result(df: pd.DataFrame, result_dir: Path):
     tab_dir = tex_dir / 'tables'
     tab_dir.mkdir(parents=True, exist_ok=True)
 
-
-    '''
-    # Fitness plots
-    plot_fitness_histograms(df, plots_dir)
-    plot_all_fitness_histogram(df, plots_dir)
-    plot_fitness_violins(df, plots_dir)
-
-    # Time plots
-    plot_time_bar(df, plots_dir)
-
-    # Create document
-    build_docs.build_latex_report(df, result_dir)
-    '''
-
+    # Generate figures
     plot_fitness_curves(df, plots_dir, fig_dir)
+    plot_execution_times(df, plots_dir, fig_dir)
 
+    # Generate main.tex
     build_docs.build_latex_main(result_dir)
 
     # Inform user of pots/document creation
