@@ -3,7 +3,7 @@ CXX = g++
 
 # Compiler flags Flags
 CXXFLAGS_BASE    = -std=c++20 -Wall -Wextra -Iinclude
-CXXFLAGS_RELEASE = -O3 -DNDEBUG
+CXXFLAGS_RELEASE = -O3 -DNDEBUG -flto -mtune=native -march=native
 CXXFLAGS_DEBUG   = -O0 -g
 
 # Mode (default = release)
