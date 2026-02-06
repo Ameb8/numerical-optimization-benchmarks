@@ -204,6 +204,11 @@ def build_result(df: pd.DataFrame, result_dir: Path):
     # Generate figures
     plot_fitness_curves(df, plots_dir, fig_dir)
     plot_execution_times(df, plots_dir, fig_dir)
+    build_docs.build_summary_table(
+        df,
+        tab_dir,
+        filename="convergence_summary.tex",
+    )
 
     # Generate main.tex
     build_docs.build_latex_main(result_dir)

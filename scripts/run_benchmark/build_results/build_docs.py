@@ -1,56 +1,81 @@
 import pandas as pd
 from pathlib import Path
 
-def latex_escape(text: str) -> str:
+def build_summary_table(
+    df: pd.DataFrame,
+    output_dir: Path,
+    *,
+    filename: str = "best_fitness_summary.tex",
+    label: str = "tab:best-fitness-summary",
+    precision: int = 3,
+) -> Path:
     """
-    Escape LaTeX special characters.
+    Write a single LaTeX table summarizing best-fitness statistics per experiment.
+
+    Rows: one per experiment
+    Columns: mean, median, std, min-max (best fitness over seeds)
+
+    Returns
+    -------
+    Path
+        Path to the written .tex file
     """
-    return (
-        text.replace("\\", r"\textbackslash{}")
-            .replace("_", r"\_")
-            .replace("%", r"\%")
-            .replace("&", r"\&")
-            .replace("#", r"\#")
-            .replace("{", r"\{")
-            .replace("}", r"\}")
-    )
 
+    output_dir.mkdir(parents=True, exist_ok=True)
+    out_path = output_dir / filename
 
-def write_fitness_summary_table(f, df: pd.DataFrame) -> None:
-    f.write(r"""
-\section{Fitness Summary Statistics}
-
-\begin{table}[H]
-\centering
-\caption{Summary statistics of fitness values across experiments}
-\label{tab:fitness-summary}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{lrrrrrrr}
-\hline
-Experiment & Mean & Std & Median & Min & Max & Range & Time (ms) \\
-\hline
-""")
-
-    for _, row in df.iterrows():
-        exp_name = latex_escape(row["experiment_name"])
-        time_ms = row["wall_time"] * 1000.0
-
-        f.write(
-            f"{exp_name} & "
-            f"{row['mean']:.4e} & "
-            f"{row['std']:.4e} & "
-            f"{row['median']:.4e} & "
-            f"{row['min']:.4e} & "
-            f"{row['max']:.4e} & "
-            f"{row['range']:.4e} & "
-            f"{time_ms:.2f} \\\\\n"
+    def esc(s: str) -> str:
+        return (
+            s.replace("_", r"\_")
+             .replace("&", r"\&")
+             .replace("%", r"\%")
         )
 
-    f.write(r"""\hline
-\end{tabular}}
-\end{table}
-""")
+    def fmt(x: float) -> str:
+        return "--" if pd.isna(x) else f"{x:.{precision}g}"
 
+    lines: list[str] = []
+
+    lines.extend([
+        r"\begin{table}[htbp]",
+        r"\centering",
+        r"\small",
+        r"\begin{tabular}{lllrcccc}",
+        r"\toprule",
+        r"Problem & Dim & Optimizer & Mean & Median & Std & Min--Max \\",
+        r"\midrule",
+    ])
+
+    df_sorted = df.sort_values(
+        by=["problem_name", "dimensions", "optimizer_type"],
+        kind="stable",
+    )
+
+    for _, row in df_sorted.iterrows():
+        lines.append(
+            " {} & {} & {} & {} & {} & {} & [{} , {}] \\\\".format(
+                esc(row["problem_name"]),
+                int(row["dimensions"]),
+                esc(row["optimizer_type"]),
+                fmt(row["best_mean"]),
+                fmt(row["best_median"]),
+                fmt(row["best_std"]),
+                fmt(row["best_min"]),
+                fmt(row["best_max"]),
+            )
+        )
+
+    lines.extend([
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\caption{Summary statistics of best fitness values over 30 independent runs per experiment.}",
+        rf"\label{{{label}}}",
+        r"\end{table}",
+        "",
+    ])
+
+    out_path.write_text("\n".join(lines))
+    return out_path
 
 def build_latex_report(
     df: pd.DataFrame,
