@@ -44,18 +44,25 @@ std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
 
 std::vector<std::vector<double>> SolutionBuilder::getSubset(
     const std::vector<std::vector<double>>& population,
-    int subsetSize
+    int subsetSize,
+    int source
 ) {
     std::vector<std::vector<double>> subset(subsetSize);
 
     // Create index array 
-    std::vector<int> indices(population.size());
-    for(int i = 0; i < population.size(); ++i)
-        indices[i] = i;
+    std::vector<int> indices(population.size() - 1);
+    int idx = 0;
+    for (int i = 0; i < population.size(); ++i) {
+        if (i != source) {
+            indices[idx] = i;
+            ++idx;
+        }
+    }
+        
 
     // Partial Fisher-Yates shuffle
     for (int i = 0; i < subsetSize; ++i) {
-        int j = i + (mt.genrand_int32() % (population.size() - i));
+        int j = i + (mt.genrand_int32() % (indices.size() - i));
         std::swap(indices[i], indices[j]);
     }
 
@@ -63,6 +70,4 @@ std::vector<std::vector<double>> SolutionBuilder::getSubset(
         subset[i] = population[indices[i]];
 
     return subset;
-
-
 }
