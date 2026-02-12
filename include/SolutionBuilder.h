@@ -77,6 +77,18 @@ public:
 
     /** @brief Returns the dimensionality of the solution space. */
     double getDimensions() { return dimensions; }
+
+    /**
+     * @brief Generates a subset of unique solutions form given population.
+     *
+     * @param population Initial population from which subset is selected.
+     * @param subsetSize Number of solutions to include in returned subset.
+     * @return A collection of unique solutions from initial population.
+     */
+    std::vector<std::vector<double>> getSubset(
+        const std::vector<std::vector<double>>& population,
+        int subsetSize
+    );
 };
 
 #endif

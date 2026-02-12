@@ -41,3 +41,28 @@ std::vector<std::vector<double>> SolutionBuilder::getNeighbors(
     
     return solutions;
 }
+
+std::vector<std::vector<double>> SolutionBuilder::getSubset(
+    const std::vector<std::vector<double>>& population,
+    int subsetSize
+) {
+    std::vector<std::vector<double>> subset(subsetSize);
+
+    // Create index array 
+    std::vector<int> indices(population.size());
+    for(int i = 0; i < population.size(); ++i)
+        indices[i] = i;
+
+    // Partial Fisher-Yates shuffle
+    for (int i = 0; i < subsetSize; ++i) {
+        int j = i + (mt.genrand_int32() % (population.size() - i));
+        std::swap(indices[i], indices[j]);
+    }
+
+    for(int i = 0; i < subsetSize; ++i)
+        subset[i] = population[indices[i]];
+
+    return subset;
+
+
+}
