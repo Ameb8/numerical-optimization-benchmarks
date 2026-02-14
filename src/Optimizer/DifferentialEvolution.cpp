@@ -32,25 +32,13 @@ double DifferentialEvolution::optimize() {
         // Temporarily stores new population
         std::vector<std::vector<double>> newPop = pop;
 
-        if(i > 0) // Set current best-found fitness
-            bestFitnesses[i] = bestFitnesses[i-1];
-
         // Calculate fitnesses for initial population
         for(int j = 0; j < popSize; j++) {
-            // Get population subset
-            std::vector<int> subset = solutionBuilder.getSubset(pop.size(), 3, j);
-        
-            std::vector<double> mutated(pop[j].size());
-
-            // Create mutated vector
-            for(int k = 0; k < mutated.size(); k++) {
-                mutated[k] = pop[subset[1]][k] - pop[subset[2]][k];
-                mutated[k] *= scale;
-                mutated[k] += pop[subset[0]][k];
-                mutated[k] = solutionBuilder.checkBounds(mutated[k]);
-            }
-           
-            
+            // Get mutated vector
+            std::vector<double> mutated =
+                mutStrat->mutate(pop, j, scale, bestVector, solutionBuilder);
+                
+            // Create crossover vector
             crossStrat->crossover(newPop[j], mutated, crossover, solutionBuilder);
 
             // Calculate fitness of original and trial vectors

@@ -13,6 +13,7 @@
 
 #include "Optimizer/Optimizer.h"
 #include "Optimizer/Crossover/Crossover.h"
+#include "Optimizer/Mutation/Mutation.h"
 
 /**
  * @class DifferentialEvolution
@@ -33,6 +34,7 @@ private:
     const double scale;
     const double crossover;
     std::unique_ptr<Crossover> crossStrat;
+    std::unique_ptr<Mutation> mutStrat;
 
     /**
      * @brief Performs a single local search run until convergence.
@@ -61,13 +63,15 @@ public:
         int popSize,
         double scale,
         double crossover,
-        std::unique_ptr<Crossover> crossStrat
+        std::unique_ptr<Crossover> crossStrat,
+        std::unique_ptr<Mutation> mutStrat
     )
         : Optimizer(solutionBuilder, problem, maxIterations),
           popSize(popSize),
           scale(scale),
           crossover(crossover),
-          crossStrat(std::move(crossStrat))
+          crossStrat(std::move(crossStrat)),
+          mutStrat(std::move(mutStrat))
     { }
 
     /**
