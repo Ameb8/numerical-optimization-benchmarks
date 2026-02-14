@@ -9,7 +9,10 @@
 #ifndef DIFFERENTIAL_EVOLUTION_H
 #define DIFFERENTIAL_EVOLUTION_H
 
+#include <memory>
+
 #include "Optimizer/Optimizer.h"
+#include "Optimizer/Crossover/Crossover.h"
 
 /**
  * @class DifferentialEvolution
@@ -29,6 +32,7 @@ private:
     const int popSize;
     const double scale;
     const double crossover;
+    std::unique_ptr<Crossover> crossStrat;
 
     /**
      * @brief Performs a single local search run until convergence.
@@ -40,9 +44,6 @@ private:
 
     std::vector<std::vector<double>> initPopulation();
 
-    void binCrossover(std::vector<double>& origin, std::vector<double>& mutant);
-    void expCrossover(std::vector<double>& origin, std::vector<double>& mutant);
-
 public:
     /**
      * @brief Constructs a Differential Evolution optimizer.
@@ -53,11 +54,20 @@ public:
      * @param popSize Initial population size
      * @param numNeighbors Number of neighbors sampled per iteration.
      */
-    DifferentialEvolution(SolutionBuilder& solutionBuilder, Problem& problem, int maxIterations, int popSize, double scale, double crossover)
+    DifferentialEvolution(
+        SolutionBuilder& solutionBuilder,
+        Problem& problem,
+        int maxIterations,
+        int popSize,
+        double scale,
+        double crossover,
+        std::unique_ptr<Crossover> crossStrat
+    )
         : Optimizer(solutionBuilder, problem, maxIterations),
           popSize(popSize),
           scale(scale),
-          crossover(crossover)
+          crossover(crossover),
+          crossStrat(std::move(crossStrat))
     { }
 
     /**

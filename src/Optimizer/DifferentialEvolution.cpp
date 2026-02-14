@@ -12,34 +12,6 @@ std::vector<std::vector<double>> DifferentialEvolution::initPopulation() {
     return pop;
 }
 
-void DifferentialEvolution::binCrossover(
-    std::vector<double>& origin,
-    std::vector<double>& mutant
-) {
-    // Assign element for guaranteed mutation
-    int j = solutionBuilder.randNum(0, origin.size());
-
-    // Perform crossover
-    for(int i = 0; i < origin.size(); i++) {
-        if(i == j || solutionBuilder.randNum() < crossover)
-            origin[i] = mutant[i];
-    }
-}
-
-void DifferentialEvolution::expCrossover(
-    std::vector<double>& origin,
-    std::vector<double>& mutant
-) {
-    // Get starting position to assure at lest one change
-    int j = solutionBuilder.randNum(0, origin.size());
-    int i = 0;
-    
-    do { // Mutate vector
-        origin[j % origin.size()] = mutant[j++ % origin.size()];    
-        i++;
-    } while(solutionBuilder.randNum() < crossover && i < origin.size());
-}
-
 
 
 double DifferentialEvolution::optimize() {
@@ -77,8 +49,9 @@ double DifferentialEvolution::optimize() {
                 mutated[k] += pop[subset[0]][k];
                 mutated[k] = solutionBuilder.checkBounds(mutated[k]);
             }
+           
             
-            binCrossover(newPop[j], mutated);
+            crossStrat->crossover(newPop[j], mutated, crossover, solutionBuilder);
 
             // Calculate fitness of original and trial vectors
             double oldFitness = problem.evaluate(pop[j]);
